@@ -7,7 +7,6 @@ OpenLane is not a tool, it is basically a flow that comprises many opensource ED
  - Introduction to RISC-V
  - Introduction to all components of open-source digital asic design
  - Simplified RTL2GDS flow
- - Introduction to OpenLANE and Strive chipsets
  - Introduction to OpenLANE detailed ASIC design flow
  - OpenLANE Directory structure in detail
  - Design Preparation Step 
@@ -40,6 +39,48 @@ OpenLane is not a tool, it is basically a flow that comprises many opensource ED
  
 ![APP](https://user-images.githubusercontent.com/68071764/214866200-680ae242-d5c2-414d-85f9-70351ae757ec.png)
 
+### Introduction to all components of open-source digital asic design
+
+The design of digital Application Specific Integrated Circuit (ASIC) requires three enablers or elements - Resistor Transistor Logic Intellectual Property (RTL IPs), Electronic Design Automation (EDA) Tools and Process Design Kit (PDK) data.
+
+![image](https://user-images.githubusercontent.com/68071764/214874172-046829ea-b8ae-49a3-9aba-d421ef319b0c.png)
+
+- Opensource RTL Designs: github, librecores, opencores
+- Opensource EDA tools: QFlow, OpenROAD, OpenLANE
+- Opensource PDK data: Google Skywater130 PDK
+- PDK (Process Design Kit): A set of data files and documents which serves as the interface between the designer and the fab. This includes cell libraries, IO libraries, design rules (DRC, LVS, etc.)
+
+### Simplified RTL2GDS flow
+
+![image](https://user-images.githubusercontent.com/68071764/214878015-de7eaed8-12fc-44d7-9a4a-3a333b24f3dc.png)
+
+- Synthesis: RTL Converted to gate level netlist using standard cell libraries (SCL)
+- Floor Planning/ Power Planning: Plan silicon area and create robust power distribution network. The power network usually uses the upper metal layer which are thicker than lower layer and thus lower resistance. This lowers the IR drop problem.
+- Placement: Placing cells on floorplan rows aligned with sites
+  1. Global Placement: for optimal position of cell
+  2. Detailed Placement: for legal positions
+- Clock tree synthesis: clock distribution to all flip flops and is usually a tree (H-tree, X-tree ... )
+- Routing: Use horizontal and vertical wires to connect cells together. The router uses PDK information (thickness, pitch, width,vias) for each metal layer to do the routing. The Sky130 defines 6 routing layers. It doe global routing and detailed routing.
+- Signoff: Involves physical verification like DRC and LVS and timing verification. Design Rule Checking or DRC ensures final layout honors all design rules and Layout versus Schematic or LVS ensures final layout matches the gate level netlist from synthesis phase. Timing verification ensures timing constraints are met.
+
+### Introduction to OpenLANE detailed ASIC design flow
+
+![image](https://user-images.githubusercontent.com/68071764/214881814-5692869c-bc8c-494f-a23d-86ce8006258b.png)
+
+OpenLANE utilises a variety of opensource tools in the execution of the ASIC flow:
+
+| TASKS | TOOLS |
+|-----|-----
+|RTL Synthesis & Technology Mapping|yosys, abc|
+|Floorplan & PDN|init_fp, ioPlacer, pdn and tapcell|
+|Placement|RePLace, Resizer, OpenPhySyn & OpenDP|
+|Static Timing Analysis|OpenSTA|
+|Clock Tree Synthesis	|TritonCTS|
+|Routing	| FastRoute and TritonRoute|
+|SPEF Extraction| SPEF-Extractor|
+|DRC Checks, GDSII Streaming out|Magic, Klayout|
+|LVS check|	Netgen|
+|Circuit validity checker|checker|
 
 
 
