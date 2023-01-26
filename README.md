@@ -142,18 +142,20 @@ Flop ratio = *<b>Number of D Flip flops/ Total Number of cells</b>*
        
 ![Screenshot 2023-01-26 at 1 32 06 PM](https://user-images.githubusercontent.com/68071764/214917814-d2438e17-d7e1-4824-9490-28e0fecb78ef.png)
 
-dfxtp_4 = 1613,
-Number of cells = 18036,
-Flop ratio = 1613/18036 = 0.0894= 8.94%
+- dfxtp_4 = 1613,
+- Number of cells = 18036,
+- Flop ratio = 1613/18036 = 0.0894= 8.94%
 
 ### characterize synthesis results 
 
 After running synthesis, inside the runs/[date]/results/synthesis is picorv32a_synthesis.v which is the mapping of the netlist to standard cell library using ABC. The runs/[date]/reports/synthesis will contain synthesis statistic reports and static timing analysis reports. The runs/[date]/synthesis/logs contains log files for the terminal output dumps for running yosys and OpenSTA.
 
-![Screenshot 2023-01-26 at 1 56 33 PM](https://user-images.githubusercontent.com/68071764/214918935-c3e667d5-eb07-409e-8652-52685cecc380.png)
-![Screenshot 2023-01-26 at 1 58 45 PM](https://user-images.githubusercontent.com/68071764/214919005-e3ef8383-01bd-471c-98bf-6a19b![Screenshot 2023-01-26 at 2 07 24 PM](https://user-images.githubusercontent.com/68071764/214919070-7d4d1438-d53a-437f-96a1-b992858cde27.png)
+- ![Screenshot 2023-01-26 at 1 56 33 PM](https://user-images.githubusercontent.com/68071764/214918935-c3e667d5-eb07-409e-8652-52685cecc380.png)
 
-e2667d9.png)
+- ![Screenshot 2023-01-26 at 1 58 45 PM](https://user-images.githubusercontent.com/68071764/214919005-e3ef8383-01bd-471c-98bf-6a19be2667d9.png)
+- ![Screenshot 2023-01-26 at 2 07 24 PM](https://user-images.githubusercontent.com/68071764/214919070-7d4d1438-d53a-437f-96a1-b992858cde27.png)
+
+
 
 
 D2
