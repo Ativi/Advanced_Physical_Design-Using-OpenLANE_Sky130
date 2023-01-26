@@ -9,6 +9,7 @@ OpenLane is not a tool, it is basically a flow that comprises many opensource ED
  - Simplified RTL2GDS flow
  - Introduction to OpenLANE detailed ASIC design flow
  - OpenLANE Directory structure in detail
+ - Lab [Day 1] - Determine Flip-flop Ratio
  - Design Preparation Step 
  - Review files after design prep and run synthesis
  - Steps to characterize synthesis results 
@@ -81,6 +82,27 @@ OpenLANE utilises a variety of opensource tools in the execution of the ASIC flo
 |DRC Checks, GDSII Streaming out|Magic, Klayout|
 |LVS check|	Netgen|
 |Circuit validity checker|checker|
+
+### OpenLANE Directory structure in detail 
+
+The openLANE file structure looks something like this:
+
+![Screenshot 2023-01-26 at 11 48 13 AM](https://user-images.githubusercontent.com/68071764/214909475-73846c57-95bf-4c26-975c-a67c283d2d4a.png)
+
+- skywater-pdk: contains PDK files provided by foundry
+- open_pdks: contains scripts to setup pdks for opensource tools
+- sky130A: contains sky130 pdk files
+
+#### Lab [Day 1] - Determine Flip-flop Ratio
+
+- The task is to find the flip-flop ratio ratio for the design picorv32a. This is the ratio of the number of flip flops to the total number of cells. For the OpenLane installation, the steps are very straight forward and can be found on the OpenLane repo.
+
+- Invoking OpenLANE: Openlane can be invoked using docker command followed by opening an interactive session. flow.tcl is a script that specifies details for openLANE flow.
+
+![Screenshot 2023-01-25 at 11 50 51 PM](https://user-images.githubusercontent.com/68071764/214909671-4920a450-4242-43e3-b7d6-b34d49e63e01.png)
+
+
+
 
 
 
