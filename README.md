@@ -30,14 +30,16 @@ OpenLane is not a tool, it is basically a flow that comprises many opensource ED
 
 - *<b>RISC V</b>* is an open source specification of an Instruction Set Architecture (ISA). ISA commonly used for personal computers. The RISC-V ISA is provided under open source licenses that do not require fees to use, which provides it a huge edge over other commercially available ISAs. It is a simple, stable, small standard base ISA with extensible ISA support, that has been redefining the flexibility, scalability, extensibility, and modularity of chip designs.
 
+- *<b>PicoRV32</b>* with the advent of an open standard ISA like RISC-V, there are many people who have created their own microprocessor cores which are documented in the RISC-V github handle found at RISC-V Cores List.PicoRV32 is one such implementation of the RISC-V ISA created by clifford wolf. PicoRV32 is a CPU core that implements the RISC-V RV32IMC Instruction Set. It can be configured as RV32E, RV32I, RV32IC, RV32IM, or RV32IMC core, and optionally contains a built-in interrupt controller.
+
+- *<b>Qflow</b>* is a complete tool chain for synthesizing digital circuits starting from verilog source and ending in physical layout for a specific target fabrication process.The tool chain is basically a collection of steps ordered in a particular sequence that makes it easier to analyse the design as it propagates through the steps.The steps are ordered in a sequential-order i.e, they can only be executed one after the other from top to bottom.
+
+![flow](https://user-images.githubusercontent.com/68071764/214872786-d44412f7-901a-4575-b6e9-33fe7a1ba882.png)
+
 -  *<b> Assembly language(Bridge between software and hardware)</b>*  Applications and softwares running in our laptops and PCs are written in a variety of languages like C, C++, Python and Java etc. These different languages cannot be directly processed and implemented by the hardware (Microprocessor Core). They need to be converted into form that is understandable by the core. This is where the ISA or the instruction set architecture (assembly language) comes into the picture. Special programs called the compiler and assembler are used to convert the instructions in different languages to the target assembly language. The compiler converts the code into assembly language, which in our case is the RISC-V ISA and the assembler takes care of converting the different instructions in textual format into binary representations which are understood by the microprocessor and executed. 
  
 ![APP](https://user-images.githubusercontent.com/68071764/214866200-680ae242-d5c2-414d-85f9-70351ae757ec.png)
 
-- *<b>PicoRV32</b>* with the advent of an open standard ISA like RISC-V, there are many people who have created their own microprocessor cores which are documented in the RISC-V github handle found at RISC-V Cores List.PicoRV32 is one such implementation of the RISC-V ISA created by clifford wolf. PicoRV32 is a CPU core that implements the RISC-V RV32IMC Instruction Set. It can be configured as RV32E, RV32I, RV32IC, RV32IM, or RV32IMC core, and optionally contains a built-in interrupt controller.
-- *<b>Qflow</b>* is a complete tool chain for synthesizing digital circuits starting from verilog source and ending in physical layout for a specific target fabrication process.The tool chain is basically a collection of steps ordered in a particular sequence that makes it easier to analyse the design as it propagates through the steps.The steps are ordered in a sequential-order i.e, they can only be executed one after the other from top to bottom.
-
-![flow](https://user-images.githubusercontent.com/68071764/214872786-d44412f7-901a-4575-b6e9-33fe7a1ba882.png)
 
 
 
