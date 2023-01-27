@@ -171,29 +171,35 @@ After running synthesis, inside the runs/[date]/results/synthesis is picorv32a_s
 
 ### Floorplanning considerations
 
-Utilization Factor & Aspect Ratio
+1. Utilization Factor & Aspect Ratio
 
 - Two parameters are of importance when it comes to floorplanning namely, Utilisation Factor and Aspect Ratio. They are defined as follows:
 
-  Utilisation Factor =  Area occupied by netlist
-                     __________________________
-                        Total area of core
-
-  Aspect Ratio =  Height
-                 ________
-                  Width
+  Utilisation Factor =  Area occupied by netlist /  Total area of core         
+                   
+  Aspect Ratio =  Height /  Width
+                 
 - A Utilisation Factor of 1 signifies 100% utilisation leaving no space for extra cells such as buffer. However, practically, the Utilisation Factor is 0.5-0.6. Likewise, an Aspect ratio of 1 implies that the chip is square shaped. Any value other than 1 implies rectanglular chip.
 
-Pre-placed cells
-
+2. Pre-placed cells
 Once the Utilisation Factor and Aspect Ratio has been decided, the locations of pre-placed cells need to be defined. Pre-placed cells are IPs comprising large combinational logic which once placed maintain a fixed position. Since they are placed before placement and routing, the are known as pre-placed cells.
 
-Decoupling capacitors
-Pre-placed cells must then be surrounded with decoupling capacitors (decaps). The resistances and capacitances associated with long wire lengths can cause the power supply voltage to drop significantly before reaching the logic circuits. This can lead to the signal value entering into the undefined region, outside the noise margin range. Decaps are huge capacitors charged to power supply voltage and placed close the logic circuit. Their role is to decouple the circuit from power supply by supplying the necessary amount of current to the circuit. They pervent crosstalk and enable local communication
+3. Decoupling capacitors
+Pre-placed cells must then be surrounded with decoupling capacitors (decaps). The resistances and capacitances associated with long wire lengths can cause the power supply voltage to drop significantly before reaching the logic circuits. This can lead to the signal value entering into the undefined region, outside the noise margin range. Decaps are huge capacitors charged to power supply voltage and placed close the logic circuit. Their role is to decouple the circuit from power supply by supplying the necessary amount of current to the circuit. They pervent crosstalk and enable local communication.
 
-Power Planning
+![Screenshot 2023-01-27 at 3 03 22 PM](https://user-images.githubusercontent.com/68071764/215054620-3e9ac8c2-6014-4433-8e53-600f2b929822.png)
+
+![Screenshot 2023-01-27 at 2 59 12 PM](https://user-images.githubusercontent.com/68071764/215054634-8a07fab0-d9c4-4f73-8fe5-975b3233177d.png)
+
+4. Power Planning
 Each block on the chip, however, cannot have its own decap unlike the pre-placed macros. Therefore a good power planning ensures that each block has its own VDD and VSS pads connected to the horizontal and vertical power and GND lines which form a power mesh.
 
-Pin Placement
+5. Pin Placement
 The netlist defines connectivity between logic gates. The place between the core and die is utilised for placing pins. The connectivity information coded in either VHDL or Verilog is used to determine the position of I/O pads of various pins. Then, logical placement blocking of pre-placed macros is performed so as to differentiate that area from that of the pin area.
+
+6. Logical Cell Placement Blockage 
+This makes sure that the automated placement and routing tool does not place any cell on the pin locations of the die.
+
+![Screenshot 2023-01-27 at 3 15 07 PM](https://user-images.githubusercontent.com/68071764/215057001-397edcea-b219-445d-ad1b-9c22f2b2aa0e.png)
+
 
