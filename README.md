@@ -200,6 +200,8 @@ The netlist defines connectivity between logic gates. The place between the core
 6. Logical Cell Placement Blockage 
 This makes sure that the automated placement and routing tool does not place any cell on the pin locations of the die.
 
+-Below are all 6 steps for floor planning:
+
 ![Screenshot 2023-01-27 at 3 15 07 PM](https://user-images.githubusercontent.com/68071764/215057001-397edcea-b219-445d-ad1b-9c22f2b2aa0e.png)
 
 
