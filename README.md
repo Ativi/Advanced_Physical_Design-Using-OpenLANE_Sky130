@@ -205,4 +205,29 @@ This makes sure that the automated placement and routing tool does not place any
 
 ![Screenshot 2023-01-27 at 3 15 07 PM](https://user-images.githubusercontent.com/68071764/215057001-397edcea-b219-445d-ad1b-9c22f2b2aa0e.png)
 
+###Floorplan run on OpenLANE & view in Magic
+
+- Set configuration variables. Before running floorplan stage, the configuration variables or switches must be configured first. The configuration variables are on openlane/configuration:
+
+- floorplan.tcl - System default envrionment variables
+- conifg.tcl
+- sky130A_sky130_fd_sc_hd_config.tcl
+
+![Screenshot 2023-01-27 at 4 24 43 PM](https://user-images.githubusercontent.com/68071764/215093714-8e87d313-9dab-4ab4-bb2d-180c8fa7bf4e.png)
+![Screenshot 2023-01-27 at 4 22 02 PM](https://user-images.githubusercontent.com/68071764/215093745-881c1569-91e8-4973-bdc8-02a9292b9a13.png)
+![Screenshot 2023-01-27 at 4 22 44 PM](https://user-images.githubusercontent.com/68071764/215093765-785d2ae2-e3e2-4f01-8bf1-3977044dc4f3.png)
+
+Floorplan envrionment variables or switches:
+
+1. FP_CORE_UTIL - floorplan core utilisation
+2. FP_ASPECT_RATIO - floorplan aspect ratio
+3. FP_CORE_MARGIN - Core to die margin area
+4. FP_IO_MODE - defines pin configurations (1 = equidistant/0 = not equidistant)
+5. FP_CORE_VMETAL - vertical metal layer
+6. FP_CORE_HMETAL - horizontal metal layer
+
+To run the picorv32a floorplan in openLANE:
+
+run_floorplan
+![Screenshot 2023-01-27 at 6 24 27 PM](https://user-images.githubusercontent.com/68071764/215095780-c33f67b6-b40e-4d0f-b56e-c98a73587660.png)
 
