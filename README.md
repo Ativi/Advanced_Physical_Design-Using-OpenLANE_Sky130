@@ -14,13 +14,14 @@ OpenLane is not a tool, it is basically a flow that comprises many opensource ED
  - characterize synthesis results 
  
  DAY2: Good Floorplan vs Bad Floorplan and Introduction to Library Cells
+ 
  - Floorplanning considerations
- -Utilization Factor & Aspect Ratio
- -Pre-placed cells
- -Decoupling capacitors
- -Power Planning
- -Pin Placement
- -Floorplan run on OpenLANE & view in Magic
+ - Utilization Factor & Aspect Ratio
+ - Pre-placed cells
+ - Decoupling capacitors
+ - Power Planning
+ - Pin Placement
+ - Floorplan run on OpenLANE & view in Magic
  
 ## DAY1: Inception of open-source EDA, OpenLANE and Sky130 PDK
 
