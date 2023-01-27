@@ -205,7 +205,7 @@ This makes sure that the automated placement and routing tool does not place any
 
 ![Screenshot 2023-01-27 at 3 15 07 PM](https://user-images.githubusercontent.com/68071764/215057001-397edcea-b219-445d-ad1b-9c22f2b2aa0e.png)
 
-###Floorplan run on OpenLANE & view in Magic
+### Floorplan run on OpenLANE & view in Magic
 
 - Set configuration variables. Before running floorplan stage, the configuration variables or switches must be configured first. The configuration variables are on openlane/configuration:
 
