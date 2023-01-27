@@ -231,3 +231,12 @@ To run the picorv32a floorplan in openLANE:
 run_floorplan
 ![Screenshot 2023-01-27 at 6 24 27 PM](https://user-images.githubusercontent.com/68071764/215095780-c33f67b6-b40e-4d0f-b56e-c98a73587660.png)
 
+- The output of this stage is runs/[date]/results/floorplan/picorv32a.floorplan.def which is a design exchange format, containing the die area and positions.
+- 
+- ![Screenshot 2023-01-28 at 12 06 37 AM](https://user-images.githubusercontent.com/68071764/215167675-e19dabcf-132b-4285-adf5-58ebcbddf025.png)
+
+- ![Screenshot 2023-01-27 at 11 35 48 PM](https://user-images.githubusercontent.com/68071764/215165947-8610cc63-b6e5-4749-a945-e2aab5d7306f.png)
+
+- The die area here is in database units and 1 micron is equivalent to 1000 database units. Thus area of the die is (660685/1000)microns*(671405/1000)microns = 443587 microns squared.
+
+
