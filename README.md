@@ -241,5 +241,14 @@ run_floorplan
 
 4. <b>View the layout on magic.</b> Open def file using <b>magic:</b>
 
+‌ativirani07@vsd-pd-workshop-01:~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/my_run1/results/floorplan$ magic -T /home/ativirani07/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../temp/merged.lef def read  picorv32a.floorplan.def
+![Screenshot 2023-01-28 at 1 29 16 PM](https://user-images.githubusercontent.com/68071764/215254484-933a150d-d305-4762-8c3a-0625836903fc.png)
+
+To center the view, press "s" to select whole die then press "v" to center the view. Point the cursor to a cell then press "s" to select it, zoom into it by pressing 'z". Type "what" in tkcon to display information of selected object. These objects might be IO pin, decap cell, or well taps as shown below.
+
+5. Run placement: % run_placement. This commmand is a wrapper which does global placement (performed by RePlace tool), Optimization (by Resier tool), and detailed placement (by OpenDP tool). It displays hundreds of iterations displaying HPWL and OVFL. The algorithm is said to be converging if the overflow is decreasing. It also checks the legality.
+
+6. View the output of this stage. The output of this stage is runs/[date]/results/placement/picorv32a.placement.def. To see actual layout after placement, open def file using magic:
+
 
 
