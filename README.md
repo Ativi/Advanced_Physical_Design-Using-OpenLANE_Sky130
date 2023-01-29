@@ -244,6 +244,7 @@ run_floorplan
 
 ‌<b>ativirani07@vsd-pd-workshop-01:~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/my_run1/results/floorplan$ magic -T /home/ativirani07/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../temp/merged.lef def read  picorv32a.floorplan.def</b>
 
+
 ![Screenshot 2023-01-28 at 1 29 16 PM](https://user-images.githubusercontent.com/68071764/215254484-933a150d-d305-4762-8c3a-0625836903fc.png)
 ![Screenshot 2023-01-29 at 1 04 20 AM](https://user-images.githubusercontent.com/68071764/215307665-94449121-add7-4c3e-a4f6-db9c52c3a16b.png)
 
@@ -255,7 +256,7 @@ run_floorplan
 ![Screenshot 2023-01-29 at 1 15 49 AM](https://user-images.githubusercontent.com/68071764/215307926-d2672aa1-ebee-4376-a9a3-4da97f85293c.png)
 
 
-5. Run placement: The objective of placement is the convergence of overflow value. If overflow value progressively reduces during the placement run it implies that the design will converge and placement will be successful. Post placement, the design can be viewed on magic within results/placement directory:
+5. <b>Run placement:</b> The objective of placement is the convergence of overflow value. If overflow value progressively reduces during the placement run it implies that the design will converge and placement will be successful. Post placement, the design can be viewed on magic within results/placement directory:
 
 <b>run_placement</b>
 ![Screenshot 2023-01-29 at 2 19 55 AM](https://user-images.githubusercontent.com/68071764/215308142-030a2712-0af6-413f-aeb4-3533694feb58.png)
@@ -265,7 +266,8 @@ Zoomed-in views of the standard cell placement:
 
 <b>Note: Power distribution network generation is usually a part of the floorplan step. However, in the openLANE flow, floorplan does not generate PDN. The steps are - floorplan, placement CTS and then PDN</b>
 
-###Library Characterization:
+### Library Characterization:
+
 Of all RTL-to-GDSII stages, one common thing that the EDA tool always need is data from the library of gates which keeps all standards cells (and, or, buffer gates,...), macros, IPs, decaps, etc. Same cells might have different flavors inside the library (different sizes, delays, threshold voltage). Bigger cell sizes means bigger drive strength to drive longer and thicker wires. Bigger threshold voltage (due to bigger size) will take more time to switch(slower clock) than those with smaller threshold voltage.
 
 A single cell needs to go through the cell design flow. The inputs to make a single cell comes from the foundry Process Design Kits:
@@ -289,30 +291,32 @@ Below are the timing variables for slew. This is two inverters in series, red is
 ![Screenshot 2023-01-28 at 11 38 28 PM](https://user-images.githubusercontent.com/68071764/215308882-5d163d0d-9f3c-4353-8dbe-1935b7f905eb.png)
 
 Below are the timing variables for propagation delay. The red is input waveform and blue is output waveform of the buffer. The left side is rise delay and right side is fall delay.
+
 ![Screenshot 2023-01-29 at 11 54 06 AM](https://user-images.githubusercontent.com/68071764/215309103-8eb1af2f-dd1d-45ba-bb5b-71937aa9a7d4.png)
 
 Negative propagation delay is unexpected. That means the output comes before the input so designer needs to choose correct threshold point to produce positive delay. Delay threshold is usually 50% and slew rate threshold is usually 20%-80%.
 
 ##DAY 3: Design a Library Cell using Magic Layout and Ngspice Characterization
 
-Configurations on OpenLANE can be changed on the flight. For example, to change IO_mode to be not equidistant, use <b>% set ::env(FP_IO_MODE) 2</b>; on OpenLANE. The IO pins will not be equidistant on mode 2 (default of 1).
-Run floorplan again via % run_floorplan and view the def layout on magic. However, changing the configuration on the fly will not change the runs/config.tcl, the configuration will only be available on the current session. To echo current value of variable: echo $::env(FP_IO_MODE)
+Configurations on OpenLANE can be changed on the flight. For example, to change IO_mode to be not equidistant, use <b>% set ::env(FP_IO_MODE) 2;</b> on OpenLANE. The IO pins will not be equidistant on mode 2 (default of 1).
+Run floorplan again via <b>% run_floorplan</b> and view the def layout on magic. However, changing the configuration on the fly will not change the runs/config.tcl, the configuration will only be available on the current session. To echo current value of variable:<b> echo $::env(FP_IO_MODE)</b>
 
 <b>Designing a Library Cell:</b>
 1. SPICE deck = component connectivity (basically a netlist) of the CMOS inverter.
 2. SPICE deck values = value for W/L (0.375u/0.25u means width is 375nm and lengthis 250nm). PMOS should be wider in width(2x or 3x) than NMOS. The gate and supply voltages are normally a multiple of length (in the example, gate voltage can be 2.5V)
 3. Add nodes to surround each component and name it. This will be used in SPICE to identify a component.
 
-###SPICE Deck Netlist Description:
+### SPICE Deck Netlist Description:
+
 ![Screenshot 2023-01-29 at 2 52 19 AM](https://user-images.githubusercontent.com/68071764/215309427-c29b0a53-86f6-4d3e-ad8b-ba43f2743472.png)
 
 Notes:
 
-Syntax for the PMOS and NMOS descriptiom:
-[component name] [drain] [gate] [source] [substrate] [transistor type] W=[width] L=[length]
-All components are described based on nodes and its values
-.op is the start of SPICE simulation operation where Vin will be sweep from 0 to 2.5 with 0.5 steps
-tsmc_025um_model.mod is the model file containing the technological parameters for the 0.25um NMOS and PMOS The steps to simulate in SPICE:
+- Syntax for the PMOS and NMOS descriptiom:
+<b>'[component name] [drain] [gate] [source] [substrate] [transistor type] W=[width] L=[length]'</b>
+- All components are described based on nodes and its values
+- <b>.op</b> is the start of SPICE simulation operation where Vin will be sweep from 0 to 2.5 with 0.5 steps
+- <b>tsmc_025um_model.mod</b> is the model file containing the technological parameters for the 0.25um NMOS and PMOS The steps to simulate in SPICE:
 
 - source [filename].cir
 - run
@@ -329,38 +333,39 @@ CMOS robustness depends on:
 
 DC transfer analysis is used for finding switching threshold. SPICE DC analysis below uses DC input of 2.5V. Simulation operation is DC sweep from 0V to 2.5V by 0.05V steps:
 
-Vin in 0 2.5
-*** Simulation Command ***
-.op
-.dc Vin 0 2.5 0.05
+- Vin in 0 2.5
+- *** Simulation Command ***
+- .op
+- .dc Vin 0 2.5 0.05
 
 Below is the result of SPICE simulation for DC analysis, the line intersection is the switching threshold:
 ![Screenshot 2023-01-29 at 12 20 46 PM](https://user-images.githubusercontent.com/68071764/215310169-f85ca662-f041-4377-a590-3513efad6274.png)
 
-- Meanwhile, transient analysis is used for finding propagation delay. SPICE transient analysis uses pulse input:
+Meanwhile, transient analysis is used for finding propagation delay. SPICE transient analysis uses pulse input:
 
-starts at 0V
-ends at 2.5V
-starts at time 0
-rise time of 10ps
-fall time of 10ps
-pulse-width of 1ns
-period of 2ns
+- starts at 0V
+- ends at 2.5V
+- starts at time 0
+- rise time of 10ps
+- fall time of 10ps
+- pulse-width of 1ns
+- period of 2ns
 
 ![Screenshot 2023-01-29 at 3 54 01 AM](https://user-images.githubusercontent.com/68071764/215310235-37ad0659-6a26-4fbe-ae77-b8f1b586a493.png)
 
-- The simulation operation has 10ps step and ends at 4ns:
+The simulation operation has 10ps step and ends at 4ns:
 
-Vin in 0 0 pulse 0 2.5 0 10p 10p 1n 2n 
-*** Simulation Command ***
-.op
-.tran 10p 4n
+- Vin in 0 0 pulse 0 2.5 0 10p 10p 1n 2n 
+- *** Simulation Command ***
+- .op
+- .tran 10p 4n
 
 Below is the result of SPICE simulation for transient analysis:
 
 ![Screenshot 2023-01-29 at 3 54 21 AM](https://user-images.githubusercontent.com/68071764/215310332-c29d773e-583b-4e1b-bfce-03cc5d481fa8.png)
 
-SPICE Deck creation & Simulation
+### SPICE Deck creation & Simulation
+
 A SPICE deck includes information about the following:
 
 1. Model description
@@ -381,58 +386,59 @@ git clone https://github.com/nickson-jose/vsdstdcelldesign
 This creates a vsdstdcelldesign named folder in the openlane directory.  
 
 To invoke magic to view the sky130_inv.mag file, the sky130A.tech file must be included in the command along with its path. To ease up the complexity of this command, the tech file can be copied from the magic folder to the vsdstdcelldesign folder.
+
 ![Screenshot 2023-01-29 at 4 07 20 AM](https://user-images.githubusercontent.com/68071764/215311231-061e9777-b1d2-4702-8797-242d66e4c7fd.png)
 
-CMOS Fabrication Process (16-Mask CMOS Process):
-1. Selecting a substrate = Layer where the IC is fabricated. Most commonly used is P-type substrate
-2. Creating active region for transistor = Separate the transistor regions using SiO2 as isolation
+### CMOS Fabrication Process (16-Mask CMOS Process):
+1. <b>Selecting a substrate</b> = Layer where the IC is fabricated. Most commonly used is P-type substrate
+2. <b>Creating active region for transistor</b> = Separate the transistor regions using SiO2 as isolation
 
-Mask 1 = Covers the photoresist layer that must not be etched away (protects the two transistor active regions)
-Photoresist layer = Can be etched away via UV light
-Si3N4 layer = Protection layer to prevent SiO2 layer to grow during oxidation (oxidation furnace)
-SiO2 layer = Grows during oxidation (LOCOS = Local Oxidation of Silicon) and will act as isolation regions between transistors or active regions
+- Mask 1 = Covers the photoresist layer that must not be etched away (protects the two transistor active regions)
+- Photoresist layer = Can be etched away via UV light
+- Si3N4 layer = Protection layer to prevent SiO2 layer to grow during oxidation (oxidation furnace)
+- SiO2 layer = Grows during oxidation (LOCOS = Local Oxidation of Silicon) and will act as isolation regions between transistors or active regions
 
 ![Screenshot 2023-01-29 at 1 32 56 PM](https://user-images.githubusercontent.com/68071764/215313442-6c2b49bd-eba9-4e72-aa40-7d8e53bca2c7.png)
 
-3. N-Well and P-Well Fabrication = Fabricate the substrate needed by PMOS (N-Well) and NMOS (P-Well)
+3. <b>N-Well and P-Well Fabrication</b> = Fabricate the substrate needed by PMOS (N-Well) and NMOS (P-Well)
 
-Phosporus (5 valence electron) is used to form N-well
-Boron (3 valence electron) is used to form P-Well.
-Mask 2 protects the N-Well (PMOS side) while P-Well (NMOS side) is being fabricated then Mask 3 while N-Well (PMOS side) is being fabricated
+- Phosporus (5 valence electron) is used to form N-well
+- Boron (3 valence electron) is used to form P-Well.
+- Mask 2 protects the N-Well (PMOS side) while P-Well (NMOS side) is being fabricated then Mask 3 while N-Well (PMOS side) is being fabricated
 
 ![Screenshot 2023-01-29 at 1 34 20 PM](https://user-images.githubusercontent.com/68071764/215313474-496fde2e-2cf3-4f02-b3d8-d3ac6756a450.png)
 
-4. Formation of Gate = Gate fabrication affects threshold voltage. Factors affecting threshold voltage includes:
+4. <b>Formation of Gate</b> = Gate fabrication affects threshold voltage. Factors affecting threshold voltage includes:
 ![Screenshot 2023-01-29 at 1 35 01 PM](https://user-images.githubusercontent.com/68071764/215313511-ae895cc8-4879-4593-8faa-86051a63102f.png)
 
 Main parameters are:
 
-Doping Concentration = Controlled by ion implantation (Mask 4 for Boron implantation in NMOS P-Well and Mask 5 for Arsenic implantation in PMOS N-Well)
-Oxide capacitance = Controlled by oxide thickness (SiO2 layer is removed then rebuilt to the desire thickness)
+- Doping Concentration = Controlled by ion implantation (Mask 4 for Boron implantation in NMOS P-Well and Mask 5 for Arsenic implantation in PMOS N-Well)
+- Oxide capacitance = Controlled by oxide thickness (SiO2 layer is removed then rebuilt to the desire thickness)
 Mask 6 is for gate formation using polysilicon layer.
 
 ![Screenshot 2023-01-29 at 1 37 20 PM](https://user-images.githubusercontent.com/68071764/215313608-3414ea76-0f89-40a8-8e6b-dd9646c1c522.png)
 
-5. Lightly Doped Drain formation = Before forming the source and drain layer, lightly doped impurity is added:
+5. <b>Lightly Doped Drain formation </b>= Before forming the source and drain layer, lightly doped impurity is added:
 
-Mask 7 for N- implantation (lightly doped N-type) for NMOS
-Mask 8 for P- implantation (lightly doped P-type) for PMOS.
-Heavily doped impurity (N+ for NMOS and P+ for PMOS) is for the actual source and drain but the lightly doped impurity will help maintain spacing between the source and drain and prevent hot electron effect and short channel effect.
+- Mask 7 for N- implantation (lightly doped N-type) for NMOS
+- Mask 8 for P- implantation (lightly doped P-type) for PMOS.
+- Heavily doped impurity (N+ for NMOS and P+ for PMOS) is for the actual source and drain but the lightly doped impurity will help maintain spacing between the source and drain and prevent hot electron effect and short channel effect.
 
 ![Screenshot 2023-01-29 at 1 38 33 PM](https://user-images.githubusercontent.com/68071764/215313687-74c4ec20-9915-4a27-9ee6-5e97089cc1bf.png)
 
-6. Source and Drain Formation = Mask 9 is for N+ implantation and Mask 10 for P+ implantation
+6. <b>Source and Drain Formation </b>= Mask 9 is for N+ implantation and Mask 10 for P+ implantation
 
 Channeling is when implantations dig too deep into substrate so add screen oxide before implantation
 The side-wall spacers maintains the N-/P- while implanting the N+/P+
 
 ![Screenshot 2023-01-29 at 1 40 36 PM](https://user-images.githubusercontent.com/68071764/215313831-1e3d87ae-25ba-42b3-9741-ab193825026a.png)
 
-7. Form Contacts and Interconnects = TiN is for local interconnections and also for bringing contacts to the top. TiS2 is for the contact to the actual Drain-Gate-Source. Mask 11 is for etching off the TiN interconnect for the first layer contact.
+7. <b>Form Contacts and Interconnects </b>= TiN is for local interconnections and also for bringing contacts to the top. TiS2 is for the contact to the actual Drain-Gate-Source. Mask 11 is for etching off the TiN interconnect for the first layer contact.
 
 ![Screenshot 2023-01-29 at 1 41 45 PM](https://user-images.githubusercontent.com/68071764/215313884-fed4b522-7c5b-49e5-bd32-00ee7665f920.png)
 
-8. Higher Level Metal Formation = We need to planarize first the layer via CMP before adding a metal interconnect. Aluminum contact is used to connect the lower contact to higher metal layer. Process is repeated until the contact reached the outermost layer.
+8. <b>Higher Level Metal Formation</b> = We need to planarize first the layer via CMP before adding a metal interconnect. Aluminum contact is used to connect the lower contact to higher metal layer. Process is repeated until the contact reached the outermost layer.
 
 - Mask 12 is for first contact hole
 - Mask 13 is for first Aluminum contact layer
@@ -440,4 +446,32 @@ The side-wall spacers maintains the N-/P- while implanting the N+/P+
 - Mask 15 is for second Aluminum contact layer. Mask 16 is for making contact to topmost layer.
 
 ![Screenshot 2023-01-29 at 1 43 00 PM](https://user-images.githubusercontent.com/68071764/215313943-a93bcb30-6a40-47d3-9856-f1779097b8f8.png)
+
+The sky130_inv.mag file can then be invoked in Magic very easily:
+
+magic -T sky130A.tech sky130_inv.mag &
+
+![Screenshot 2023-01-29 at 2 42 46 PM](https://user-images.githubusercontent.com/68071764/215317722-284b5d87-2711-4646-aff5-6bc6ecc2738d.png)
+![Screenshot 2023-01-29 at 3 04 48 PM](https://user-images.githubusercontent.com/68071764/215318265-e3842c9d-16ff-4393-9fad-b804538de4df.png)
+
+In Sky130 the first layer is called the local interconnect layer or Locali as shown above.
+
+To verify whether the layout is that of CMOS inverter, verification of P-diffusiona nd N-diffusion regions with Polysilicon can be observed:
+
+![Screenshot 2023-01-29 at 3 07 05 PM](https://user-images.githubusercontent.com/68071764/215317892-285f4fa4-9b13-4e89-aeff-2f69b507b499.png)
+![Screenshot 2023-01-29 at 3 08 55 PM](https://user-images.githubusercontent.com/68071764/215318284-eabe8314-e75e-4299-a950-217b605906c4.png)
+
+Other verification steps are to check drain and source connections. The drains of both PMOS and NMOS must be connected to output port (here, Y) and the sources of both must be connected to power supply VDD (here, VPWR).
+
+<b>LEF or library exchange format:</b> A format that tells us about cell boundaries, VDD and GND lines. It contains no info about the logic of circuit and is also used to protect the IP.
+
+<b>SPICE extraction:<b/> Within the Magic environment, following commands are used in tkcon to achieve .mag to .spice extraction:
+ 
+- extract all
+- ext2spice cthresh 0 rethresh 0
+- ext2spice
+ 
+![Screenshot 2023-01-29 at 3 36 23 PM](https://user-images.githubusercontent.com/68071764/215320306-686959e9-d200-4a0d-994d-ce529663e9ff.png)
+ 
+ 
 
