@@ -556,6 +556,16 @@ Four timing parameters are used to characterize the inverter standard cell:
 - Fall transition- Time taken for the output to fall from 80% of max value to 20% of max value
 - Cell rise delay = time(50% output rise) - time(50% input fall)
 - Cell fall delay = time(50% output fall) - time(50% input rise)
+ ![Screenshot 2023-01-29 at 8 32 47 PM](https://user-images.githubusercontent.com/68071764/215336269-017903dc-0ccf-4608-8be6-0890af83433d.png)
+![Screenshot 2023-01-29 at 8 34 11 PM](https://user-images.githubusercontent.com/68071764/215336273-41fbc96d-59fe-4c81-a2f6-393978e774fc.png)
+ 
+ 2.19298- 2.15672= 0.03626ns
+ 
+![Screenshot 2023-01-29 at 8 59 19 PM](https://user-images.githubusercontent.com/68071764/215336738-65dadd10-74ce-482f-bc54-189cfd5d7e63.png)
+
+
+ 
+
  
  
  
