@@ -447,6 +447,13 @@ The side-wall spacers maintains the N-/P- while implanting the N+/P+
 
 ![Screenshot 2023-01-29 at 1 43 00 PM](https://user-images.githubusercontent.com/68071764/215313943-a93bcb30-6a40-47d3-9856-f1779097b8f8.png)
 
+### Inverter Standard cell Layout & SPICE extraction
+
+The Magic layout of a CMOS inverter will be used so as to intergate the inverter with the picorv32a design. To do this, inverter magic file is sourced from <b>vsdstdcelldesign</b> by cloning it within the <b>openlane_working_dir/openlane</b> directory as follows:
+
+git clone https://github.com/nickson-jose/vsdstdcelldesign
+
+
 The sky130_inv.mag file can then be invoked in Magic very easily:
 
 magic -T sky130A.tech sky130_inv.mag &
