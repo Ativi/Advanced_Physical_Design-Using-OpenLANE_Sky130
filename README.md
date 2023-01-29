@@ -22,6 +22,12 @@ OpenLane is not a tool, it is basically a flow that comprises many opensource ED
  - Power Planning
  - Pin Placement
  - Floorplan run on OpenLANE & view in Magic
+ - Placement
+- Placement run on OpenLANE & view in Magic
+- library characterization
+- Timing characterization
+
+DAY3:
  
 ## DAY1: Inception of open-source EDA, OpenLANE and Sky130 PDK
 
@@ -546,10 +552,10 @@ For simulation, ngspice is invoked in ther terminal:
  ### Inverter Standard cell characterization
 Four timing parameters are used to characterize the inverter standard cell:
 
-Rise transition: Time taken for the output to rise from 20% of max value to 80% of max value
-Fall transition- Time taken for the output to fall from 80% of max value to 20% of max value
-Cell rise delay = time(50% output rise) - time(50% input fall)
-Cell fall delay = time(50% output fall) - time(50% input rise)
+- Rise transition: Time taken for the output to rise from 20% of max value to 80% of max value
+- Fall transition- Time taken for the output to fall from 80% of max value to 20% of max value
+- Cell rise delay = time(50% output rise) - time(50% input fall)
+- Cell fall delay = time(50% output fall) - time(50% input rise)
  
  
  
