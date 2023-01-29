@@ -449,21 +449,24 @@ The side-wall spacers maintains the N-/P- while implanting the N+/P+
 
 ### Inverter Standard cell Layout & SPICE extraction
 
-The Magic layout of a CMOS inverter will be used so as to intergate the inverter with the picorv32a design. To do this, inverter magic file is sourced from <b>vsdstdcelldesign</b> by cloning it within the <b>openlane_working_dir/openlane</b> directory as follows:
+- The Magic layout of a CMOS inverter will be used so as to intergate the inverter with the picorv32a design. To do this, inverter magic file is sourced from <b>vsdstdcelldesign</b> by cloning it within the <b>openlane_working_dir/openlane</b> directory as follows:
 
 git clone https://github.com/nickson-jose/vsdstdcelldesign
 
+- This creates a vsdstdcelldesign named folder in the openlane directory.
 
-The sky130_inv.mag file can then be invoked in Magic very easily:
+- To invoke magic to view the sky130_inv.mag file, the sky130A.tech file must be included in the command along with its path. To ease up the complexity of this command, the tech file can be copied from the magic folder to the vsdstdcelldesign folder.
+
+- The sky130_inv.mag file can then be invoked in Magic very easily:
 
 magic -T sky130A.tech sky130_inv.mag &
 
 ![Screenshot 2023-01-29 at 2 42 46 PM](https://user-images.githubusercontent.com/68071764/215317722-284b5d87-2711-4646-aff5-6bc6ecc2738d.png)
 ![Screenshot 2023-01-29 at 3 04 48 PM](https://user-images.githubusercontent.com/68071764/215318265-e3842c9d-16ff-4393-9fad-b804538de4df.png)
 
-In Sky130 the first layer is called the local interconnect layer or Locali as shown above.
+- In Sky130 the first layer is called the local interconnect layer or Locali as shown above.
 
-To verify whether the layout is that of CMOS inverter, verification of P-diffusiona nd N-diffusion regions with Polysilicon can be observed:
+- To verify whether the layout is that of CMOS inverter, verification of P-diffusiona nd N-diffusion regions with Polysilicon can be observed:
 
 ![Screenshot 2023-01-29 at 3 07 05 PM](https://user-images.githubusercontent.com/68071764/215317892-285f4fa4-9b13-4e89-aeff-2f69b507b499.png)
 ![Screenshot 2023-01-29 at 3 08 55 PM](https://user-images.githubusercontent.com/68071764/215318284-eabe8314-e75e-4299-a950-217b605906c4.png)
