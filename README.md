@@ -585,7 +585,38 @@ rise delay:
  4.05287-4.05057=0.0023ns
 
  
+The above characterisation is done at 27 C.
 
+Next objective is to use this layout of inverter to create a lef file. Using this lef in openlane and plugging this cell we will make a custom cell. We will plug this in picorv32a.
+ 
+ ### Magic Features & DRC rules
+The technology file is a setup file that declares layer types, colors, patterns, electrical connectivity, DRC, device extraction rules and rules to read LEF and DEF files. Magic layouts can be sourced from opencircuitdesign.com using the command:
  
  
+ DAY 4 Pre-layout timing analysis and importance of good clock tree
  
+ Lab Part 1 [Day 4] - Extracting the LEF File:
+ 
+ PnR tool does not need all informations from the .mag file like the logic part but only PnR boundaries, power/ground ports, and input/output ports. This is what a LEF file actually contains. So the next step is to extract the LEF file from Magic. But first, we need to follow guidelines of the PnR tool for the standard cells:
+
+- The input and output ports lies on the intersection of the horizontal and vertical tracks (ensure the routes can reach that ports).
+The width of the standard cell must be odd multiple of the tracks horizontal pitch and height must be odd multiples of tracks vertical pitch
+- To check these guidelines, we need to change the grid of Magic to match the actual metal tracks. The ``` pdks/sky130A/libs.tech/openlane/sky130_fd_sc_hd/tracks ```.info contains those metal informations.
+
+- Use grid command inside the tkon terminal to match the tracks informations:
+ 
+ ![Screenshot 2023-01-30 at 12 30 52 AM](https://user-images.githubusercontent.com/68071764/215351344-447b64f0-022d-4dbe-b9a8-10a0d3ed76a1.png)
+![Screenshot 2023-01-30 at 12 37 20 AM](https://user-images.githubusercontent.com/68071764/215351352-d6078296-fd0c-4e2e-bf23-de329af27a92.png)
+
+-  The grids show where the routing for the local-interconnet layer can only happen, the distance of the grid lines are the required pitch of the wire. Below, we can see that the guidelines are satisfied:
+ 
+ ![Screenshot 2023-01-30 at 12 37 20 AM](https://user-images.githubusercontent.com/68071764/215351464-48cf3724-fcfc-41ba-b7c6-495b5ef62bf3.png)
+
+-  Next, we will extract the LEF file. The LEF file contains the cell size, port definitions, and properties which aid the placer and router tool. With that, the ports definition, port class, and port use must be set first. The instructions to set these definitions via Magic are on the <B>vsdstdcelldesign</b> repo.
+
+- Next, save the mag file with a new filename save sky130_myinverter.mag. Then type lef write on the tcon terminal. It will generate a LEF file with same name as the magfile sky130_myinverter.lef. Inside that LEF file is:
+ 
+ ![image](https://user-images.githubusercontent.com/68071764/215351586-d4da20b4-44e2-4321-8145-ca65fe576216.png)
+ 
+ 
+
