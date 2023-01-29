@@ -556,13 +556,33 @@ Four timing parameters are used to characterize the inverter standard cell:
 - Fall transition- Time taken for the output to fall from 80% of max value to 20% of max value
 - Cell rise delay = time(50% output rise) - time(50% input fall)
 - Cell fall delay = time(50% output fall) - time(50% input rise)
- ![Screenshot 2023-01-29 at 8 32 47 PM](https://user-images.githubusercontent.com/68071764/215336269-017903dc-0ccf-4608-8be6-0890af83433d.png)
+
+ 1. rise transiton - time taken by output waveform to transit from 20% to 80% of VDD 20% value (0.66) = 2.19298 ns
+    80% value (2.64) = 2.15672= 0.036
+ 
+      2.19298- 2.15672= 0.03626ns
+ 
 ![Screenshot 2023-01-29 at 8 34 11 PM](https://user-images.githubusercontent.com/68071764/215336273-41fbc96d-59fe-4c81-a2f6-393978e774fc.png)
  
- 2.19298- 2.15672= 0.03626ns
+ 2.fall transition - time taken by output waveform to transit from 80% (2.64) to 20% (0.66) of VDD.
  
-![Screenshot 2023-01-29 at 8 59 19 PM](https://user-images.githubusercontent.com/68071764/215336738-65dadd10-74ce-482f-bc54-189cfd5d7e63.png)
+ ![Screenshot 2023-01-29 at 10 28 14 PM](https://user-images.githubusercontent.com/68071764/215342922-f92094c2-941e-4829-830c-36eebc718b2f.png)
 
+     4.07407-4.03704=0.03703ns
+ 
+3 & 4. Propagation delay - The difference between the time when output as well as input is at 50% (1.65). ( o/p falls and i/p rises gives fall delay, o/p rises and i/p falls gives us the rise delay)
+
+rise delay: 
+
+![Screenshot 2023-01-29 at 8 59 19 PM](https://user-images.githubusercontent.com/68071764/215336738-65dadd10-74ce-482f-bc54-189cfd5d7e63.png)
+ 
+ 2.18148-2.15556= 0.02592ns
+ 
+ fall delay:
+ 
+![Screenshot 2023-01-29 at 10 40 05 PM](https://user-images.githubusercontent.com/68071764/215343464-e3d805ae-a066-4afc-aed0-fd1fe0a888a8.png)
+
+ 4.05287-4.05057=0.0023ns
 
  
 
