@@ -434,10 +434,10 @@ The side-wall spacers maintains the N-/P- while implanting the N+/P+
 
 8. Higher Level Metal Formation = We need to planarize first the layer via CMP before adding a metal interconnect. Aluminum contact is used to connect the lower contact to higher metal layer. Process is repeated until the contact reached the outermost layer.
 
-Mask 12 is for first contact hole
-Mask 13 is for first Aluminum contact layer
-Mask 14 is for second contact hole
-Mask 15 is for second Aluminum contact layer. Mask 16 is for making contact to topmost layer.
+- Mask 12 is for first contact hole
+- Mask 13 is for first Aluminum contact layer
+- Mask 14 is for second contact hole
+- Mask 15 is for second Aluminum contact layer. Mask 16 is for making contact to topmost layer.
 
 ![Screenshot 2023-01-29 at 1 43 00 PM](https://user-images.githubusercontent.com/68071764/215313943-a93bcb30-6a40-47d3-9856-f1779097b8f8.png)
 
