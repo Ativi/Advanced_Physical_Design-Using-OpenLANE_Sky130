@@ -295,7 +295,8 @@ Negative propagation delay is unexpected. That means the output comes before the
 
 ##DAY 3: Design a Library Cell using Magic Layout and Ngspice Characterization
 
-Configurations on OpenLANE can be changed on the flight. For example, to change IO_mode to be not equidistant, use % set ::env(FP_IO_MODE) 2; on OpenLANE. The IO pins will not be equidistant on mode 2 (default of 1). Run floorplan again via % run_floorplan and view the def layout on magic. However, changing the configuration on the fly will not change the runs/config.tcl, the configuration will only be available on the current session. To echo current value of variable: echo $::env(FP_IO_MODE)
+Configurations on OpenLANE can be changed on the flight. For example, to change IO_mode to be not equidistant, use <b>% set ::env(FP_IO_MODE) 2</b>; on OpenLANE. The IO pins will not be equidistant on mode 2 (default of 1).
+Run floorplan again via % run_floorplan and view the def layout on magic. However, changing the configuration on the fly will not change the runs/config.tcl, the configuration will only be available on the current session. To echo current value of variable: echo $::env(FP_IO_MODE)
 
 <b>Designing a Library Cell:</b>
 1. SPICE deck = component connectivity (basically a netlist) of the CMOS inverter.
@@ -312,6 +313,52 @@ Syntax for the PMOS and NMOS descriptiom:
 All components are described based on nodes and its values
 .op is the start of SPICE simulation operation where Vin will be sweep from 0 to 2.5 with 0.5 steps
 tsmc_025um_model.mod is the model file containing the technological parameters for the 0.25um NMOS and PMOS The steps to simulate in SPICE:
+
+- source [filename].cir
+- run
+- setplot 
+- dc1 
+- plot out vs in 
+
+SPICE Analysis for Switching Threshold and Propagation Delay:
+CMOS robustness depends on:
+
+1. Switching threshold = Vin is equal to Vout. This the point where both PMOS and NMOS is in saturation or kind of turned on, and leakage current is high. If PMOS is thicker than NMOS, the CMOS will have higher switching threshold (1.2V vs 1V) while threshold will be lower when NMOS becomes thicker.
+
+2. Propagation delay = rise or fall delay
+
+DC transfer analysis is used for finding switching threshold. SPICE DC analysis below uses DC input of 2.5V. Simulation operation is DC sweep from 0V to 2.5V by 0.05V steps:
+
+Vin in 0 2.5
+*** Simulation Command ***
+.op
+.dc Vin 0 2.5 0.05
+
+Below is the result of SPICE simulation for DC analysis, the line intersection is the switching threshold:
+![Screenshot 2023-01-29 at 12 20 46 PM](https://user-images.githubusercontent.com/68071764/215310169-f85ca662-f041-4377-a590-3513efad6274.png)
+
+- Meanwhile, transient analysis is used for finding propagation delay. SPICE transient analysis uses pulse input:
+
+starts at 0V
+ends at 2.5V
+starts at time 0
+rise time of 10ps
+fall time of 10ps
+pulse-width of 1ns
+period of 2ns
+
+![Screenshot 2023-01-29 at 3 54 01 AM](https://user-images.githubusercontent.com/68071764/215310235-37ad0659-6a26-4fbe-ae77-b8f1b586a493.png)
+
+- The simulation operation has 10ps step and ends at 4ns:
+
+Vin in 0 0 pulse 0 2.5 0 10p 10p 1n 2n 
+*** Simulation Command ***
+.op
+.tran 10p 4n
+
+Below is the result of SPICE simulation for transient analysis:
+
+![Screenshot 2023-01-29 at 3 54 21 AM](https://user-images.githubusercontent.com/68071764/215310332-c29d773e-583b-4e1b-bfce-03cc5d481fa8.png)
 
 
 
