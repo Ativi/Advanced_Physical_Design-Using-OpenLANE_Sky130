@@ -483,5 +483,10 @@ Other verification steps are to check drain and source connections. The drains o
  
 ![Screenshot 2023-01-29 at 3 36 23 PM](https://user-images.githubusercontent.com/68071764/215320306-686959e9-d200-4a0d-994d-ce529663e9ff.png)
  
+ - Now check what is present inside spice file.
+ 
+ ![Screenshot 2023-01-29 at 3 40 08 PM](https://user-images.githubusercontent.com/68071764/215321040-b5cac56a-d6cb-47de-9598-8d2ef2c90e5b.png)
+
+ So here is our extracted SPICE model present with us.
  
 
