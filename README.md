@@ -529,3 +529,27 @@ run
 .endc
 .end 
  ```
+For simulation, ngspice is invoked in ther terminal:
+ ```
+ ngspice sky130_inv.spice
+ ```
+ ![Screenshot 2023-01-29 at 5 22 20 PM](https://user-images.githubusercontent.com/68071764/215325250-06885339-af1c-4a31-8418-21ee3497cf1d.png)
+
+ The output "y" is to be plotted with "time" and swept over the input "a":
+```
+ plot y vs time a
+ ```
+ ![Screenshot 2023-01-29 at 5 51 10 PM](https://user-images.githubusercontent.com/68071764/215325775-3cb2b578-39d2-4696-820c-f20ee71ead86.png)
+
+ The spikes in the output at switching points is due to low capacitance loads. This can be taken care of by editing the spice deck to increase the load capacitance value.
+ 
+ ### Inverter Standard cell characterization
+Four timing parameters are used to characterize the inverter standard cell:
+
+Rise transition: Time taken for the output to rise from 20% of max value to 80% of max value
+Fall transition- Time taken for the output to fall from 80% of max value to 20% of max value
+Cell rise delay = time(50% output rise) - time(50% input fall)
+Cell fall delay = time(50% output fall) - time(50% input rise)
+ 
+ 
+ 
