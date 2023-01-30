@@ -484,7 +484,7 @@ Other verification steps are to check drain and source connections. The drains o
 
 <b>LEF or library exchange format:</b> A format that tells us about cell boundaries, VDD and GND lines. It contains no info about the logic of circuit and is also used to protect the IP.
 
-<b>SPICE extraction:<b/> Within the Magic environment, following commands are used in tkcon to achieve .mag to .spice extraction:
+SPICE extraction: Within the Magic environment, following commands are used in tkcon to achieve .mag to .spice extraction:
  
 - extract all
 - ext2spice cthresh 0 rethresh 0
