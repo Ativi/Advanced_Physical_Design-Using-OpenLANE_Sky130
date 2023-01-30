@@ -660,7 +660,7 @@ Unlike the general ASIC flow, Power Distribution Network generation is not a par
  
  A DEF file will be formed runs/[date]/results/routing/picorv32.def Open the DEF file output of routing stage in Magic:
  
- magic -T /home/angelo/Desktop/OpenLane/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.nom.lef def read picorv32.def
+
  
  Similar to what we did when we plugged in the custom inverter cell, look for sky130_myinverter at the DEF file then search that cell instance in magic:
  
