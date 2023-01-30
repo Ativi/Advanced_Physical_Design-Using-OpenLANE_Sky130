@@ -672,5 +672,20 @@ Unlike the general ASIC flow, Power Distribution Network generation is not a par
 
  
  
- 
- 
+ Differences from older OpenLANE versions
+In the new version, FP_CORE_UTIL, FP_CORE_VMETAL and FP_CORE_HMETAL environment variables are missing in ioPlacer.log and config.tcl. They need to be included in config.tcl file.
+run_floorplan fails after the STA analysis in the new version. An alternate command can be used: init_floorplan
+SPEF extraction need not be externally performed in the new version. It has been integrated into the OpenLANE flow
+Note: In the new version following commands may be used for an error-free flow:
+
+```
+init_floorplan 
+place_io
+global_placement_or
+detailed_placement 
+tap_decap_or
+detailed_placement
+gen_pdn
+run_routing
+ ```
+### References
