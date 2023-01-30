@@ -621,11 +621,13 @@ The width of the standard cell must be odd multiple of the tracks horizontal pit
  
  ![image](https://user-images.githubusercontent.com/68071764/215351586-d4da20b4-44e2-4321-8145-ca65fe576216.png)
 
+![Screenshot 2023-01-30 at 10 30 11 AM](https://user-images.githubusercontent.com/68071764/215500801-b3f25534-8a9e-430d-b438-f4e000892b43.png)
 
 ![Screenshot 2023-01-30 at 1 17 32 PM](https://user-images.githubusercontent.com/68071764/215497682-96d379c1-a0c1-45fe-8c58-2f6f8ad6ffb1.png)
 
 ![Screenshot 2023-01-30 at 10 29 24 AM](https://user-images.githubusercontent.com/68071764/215497791-931f1f83-1235-4158-8293-e8922fd377db.png)
 
+![Screenshot 2023-01-30 at 1 08 47 AM](https://user-images.githubusercontent.com/68071764/215500593-e9f72be8-dd5e-4381-ae50-c1ce4ce09601.png)
 
 
 ![Screenshot 2023-01-30 at 1 56 45 PM](https://user-images.githubusercontent.com/68071764/215497395-d11d8711-84d1-4961-ad5f-b1b95269ea69.png)
