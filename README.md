@@ -620,10 +620,34 @@ The width of the standard cell must be odd multiple of the tracks horizontal pit
 - Next, save the mag file with a new filename save sky130_myinverter.mag. Then type lef write on the tcon terminal. It will generate a LEF file with same name as the magfile sky130_myinverter.lef. Inside that LEF file is:
  
  ![image](https://user-images.githubusercontent.com/68071764/215351586-d4da20b4-44e2-4321-8145-ca65fe576216.png)
+
+
+![Screenshot 2023-01-30 at 1 17 32 PM](https://user-images.githubusercontent.com/68071764/215497682-96d379c1-a0c1-45fe-8c58-2f6f8ad6ffb1.png)
+
+![Screenshot 2023-01-30 at 10 29 24 AM](https://user-images.githubusercontent.com/68071764/215497791-931f1f83-1235-4158-8293-e8922fd377db.png)
+
+
+
+![Screenshot 2023-01-30 at 1 56 45 PM](https://user-images.githubusercontent.com/68071764/215497395-d11d8711-84d1-4961-ad5f-b1b95269ea69.png)
+
+![Screenshot 2023-01-30 at 1 18 37 PM](https://user-images.githubusercontent.com/68071764/215497587-9d1d6b05-7d46-4d74-8c50-33ad61ee3d69.png)
+
+
+![Screenshot 2023-01-30 at 1 35 00 PM](https://user-images.githubusercontent.com/68071764/215497475-bf6c1bc5-f662-443e-8ba6-e12e8b2ca5e4.png)
+
+
+![Screenshot 2023-01-30 at 1 57 48 PM](https://user-images.githubusercontent.com/68071764/215497300-37e8753f-4b66-4022-b24c-10a00fc08e53.png)
+
+
+ ![Screenshot 2023-01-30 at 5 33 44 PM](https://user-images.githubusercontent.com/68071764/215497212-45e0bcf0-aaf5-41ba-84f1-056f5a194a91.png)
+
+ 
+ 
  ### LAB DAY 4 (PART 4)
  
- Clock Tree Synthesis
-The purpose of building a clock tree is enable the clock input to reach every element and to ensure a zero clock skew. H-tree is a common methodology followed in CTS. Before attempting a CTS run in TritonCTS tool, if the slack was attempted to be reduced in previous run, the netlist may have gotten modified by cell replacement techniques. Therefore, the verilog file needs to be modified using the write_verilog command. Then, the synthesis, floorplan and placement is run again. To run CTS use the below command:
+ In the terminal in which we run the run_cts command there only go to openroad. Type the following command in the terminal.
+openroad
+This will open the open road. Our objective to do the analysis of the entire circut where clock tree has been build now. Now we will open OpenSTA here. For timing alnalysis.
 
 <b>run_cts</b>
 
@@ -640,6 +664,11 @@ set_propagated_clock (all_clocks)
 report_checks -path_delay min_max -format full_clock_expanded -digits 4
 ```
  ![Screenshot 2023-01-30 at 5 41 00 PM](https://user-images.githubusercontent.com/68071764/215495685-e7b43474-bbfc-4b7e-b3c7-9920c2f06c3e.png)
+ 
+ For typical cornor both the slack is met i.e., no violation. For max and min cornor we have to do it seperatly because multicornor is not supported.
+
+The buffer which we have:
+
 ![Screenshot 2023-01-30 at 4 27 15 PM](https://user-images.githubusercontent.com/68071764/215495934-b4d8a43e-b25c-484f-9c8c-88dbf02df8c4.png)
 
  
