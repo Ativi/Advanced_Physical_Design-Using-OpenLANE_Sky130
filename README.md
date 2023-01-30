@@ -1,4 +1,7 @@
-# <b>OpenLane</b>
+# <b>About the project</b>
+
+This project gives an interactive tutorial experienced during the VSD Advanced Physical Design workshop using OpenLANE.
+
 OpenLane is not a tool, it is basically a flow that comprises many opensource EDA tools which includes OpenRoad, Yosys, ABC, Fault, Qflow, Magic and a number of custom scripts for design exploration and optimization. Basic aim to have OpenLane is to have complete RTL to GDSII flow.
 
 # Table of Contents
@@ -619,4 +622,55 @@ The width of the standard cell must be odd multiple of the tracks horizontal pit
  ![image](https://user-images.githubusercontent.com/68071764/215351586-d4da20b4-44e2-4321-8145-ca65fe576216.png)
  
  
+## DAY 5: Final Steps for RTL2GDS using TritonRoute and OpenSTA
+ 
+ ### Maze Routing:
+ One simple routing algorithm is Maze Routing or Lee's routing:
 
+The shortest path is one that follows a steady increment of one (1-to-9 on the example below). There might be multiple path like this but the best path that the tool will choose is one with less bends. The route should not be diagonal and must not overlap an obstruction such as macros.
+This algorithm however has high run time and consume a lot of memory thus more optimized routing algorithm is preferred (but the principles stays the same where route with shortest path and less bends is preferred)
+ 
+ ![Screenshot 2023-01-30 at 6 27 15 PM](https://user-images.githubusercontent.com/68071764/215484704-c22bd851-f0ff-49e9-81c2-ad31f199c690.png)
+
+ ### DRC Cleaning:
+DRC cleaning is the next step after routing. DRC cleaning is done to ensure the routes can be fabricated and printed in silicon faithfully. Most DRC is due to the constraints of the photolitographic machine for chip fabrication where the wavelength of light used is limited. There are thousands of DRC and some DRC are:
+
+- Minimum wire width
+- Minimum wire pitch (center to center spacing)
+- Minimum wire spacing (edge to edge spacing)
+- Signal short = this can be solved my moving the route to next layer using vias. This results in more DRC (Via width, Via Spacing, etc.). Higher metal layer must be wider than lower metal layer and this is another DRC.
+ 
+ ### Power Distribution Network:
+ 
+This is just a review on PDN. The power and ground rails has a pitch of 2.72um thus the reason why the customized inverter cell has a height of 2.72 or else the power and ground rails will not be able to power up the cell. Looking at the LEF file runs/[date]/tmp/merged.nom.lef, you will notice that all cells are of height 2.72um and only width differs.
+
+As shown below, power and ground flows from power/ground pads -> power/ground ring-> power/ground straps -> power/ground rails.
+ 
+ ![image](https://user-images.githubusercontent.com/68071764/215485019-aa6898fd-8f5e-4677-b079-95521f315c51.png)
+
+ Lab Part 1 [Day 5] - Routing Stage:
+ 
+ Power Distribution Network generation
+ 
+Unlike the general ASIC flow, Power Distribution Network generation is not a part of floorplan run in OpenLANE. PDN must be generated after CTS and post-CTS STA analysis:
+ 
+ gen_pdn
+ 
+ run_routing 
+ 
+ A DEF file will be formed runs/[date]/results/routing/picorv32.def Open the DEF file output of routing stage in Magic:
+ 
+ magic -T /home/angelo/Desktop/OpenLane/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.nom.lef def read picorv32.def
+ 
+ Similar to what we did when we plugged in the custom inverter cell, look for sky130_myinverter at the DEF file then search that cell instance in magic:
+ 
+ ![Screenshot 2023-01-30 at 5 52 10 PM](https://user-images.githubusercontent.com/68071764/215489976-87917e27-f482-420a-abb3-d6b0244d3255.png)
+
+ ![Screenshot 2023-01-30 at 5 56 03 PM](https://user-images.githubusercontent.com/68071764/215490022-eeacf7a2-12fe-428d-86f9-3cfc5ad02147.png)
+
+ ![Screenshot 2023-01-30 at 5 57 39 PM](https://user-images.githubusercontent.com/68071764/215490042-17cc534d-e01c-4a0b-bb99-b464bc6529e4.png)
+
+ 
+ 
+ 
+ 
