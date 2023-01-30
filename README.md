@@ -620,6 +620,29 @@ The width of the standard cell must be odd multiple of the tracks horizontal pit
 - Next, save the mag file with a new filename save sky130_myinverter.mag. Then type lef write on the tcon terminal. It will generate a LEF file with same name as the magfile sky130_myinverter.lef. Inside that LEF file is:
  
  ![image](https://user-images.githubusercontent.com/68071764/215351586-d4da20b4-44e2-4321-8145-ca65fe576216.png)
+ ### LAB DAY 4 (PART 4)
+ 
+ Clock Tree Synthesis
+The purpose of building a clock tree is enable the clock input to reach every element and to ensure a zero clock skew. H-tree is a common methodology followed in CTS. Before attempting a CTS run in TritonCTS tool, if the slack was attempted to be reduced in previous run, the netlist may have gotten modified by cell replacement techniques. Therefore, the verilog file needs to be modified using the write_verilog command. Then, the synthesis, floorplan and placement is run again. To run CTS use the below command:
+
+<b>run_cts</b>
+
+The CTS run adds clock buffers in therefore buffer delays come into picture and our analysis from here on deals with real clocks. Setup and hold time slacks may now be analysed in the post-CTS STA anlysis in OpenROAD within the openLANE flow:
+```
+openroad
+write_db pico_cts.db
+read_db pico_cts.db
+read_verilog /openLANE_flow/designs/picorv32a/runs/03-07_11-25/results/synthesis/picorv32a.synthesis_cts.v
+read_liberty $::env(LIB_SYNTH_COMPLETE)
+link_design picorv32a
+read_sdc /openLANE_flow/designs/picorv32a/src/my_base.sdc
+set_propagated_clock (all_clocks)
+report_checks -path_delay min_max -format full_clock_expanded -digits 4
+```
+ ![Screenshot 2023-01-30 at 5 41 00 PM](https://user-images.githubusercontent.com/68071764/215495685-e7b43474-bbfc-4b7e-b3c7-9920c2f06c3e.png)
+![Screenshot 2023-01-30 at 4 27 15 PM](https://user-images.githubusercontent.com/68071764/215495934-b4d8a43e-b25c-484f-9c8c-88dbf02df8c4.png)
+
+ 
  
  
 ## DAY 5: Final Steps for RTL2GDS using TritonRoute and OpenSTA
