@@ -56,9 +56,8 @@ OpenLane is not a tool, it is basically a flow that comprises many opensource ED
 - Power Distribution Network
 - Routing Stage
 
-> References
->  - Kunal Ghosh - Co-founder of VSD
-> -  Nickson Jose - Workshop Instructor
+> Acknowledgement
+
  
 # DAY1: Inception of open-source EDA, OpenLANE and Sky130 PDK
 
@@ -198,7 +197,7 @@ Flop ratio = *<b>Number of D Flip flops/ Total Number of cells</b>*
 
 ### characterize synthesis results 
 
-After running synthesis, inside the runs/[date]/results/synthesis is picorv32a_synthesis.v which is the mapping of the netlist to standard cell library using ABC. The runs/[date]/reports/synthesis will contain synthesis statistic reports and static timing analysis reports. The runs/[date]/synthesis/logs contains log files for the terminal output dumps for running yosys and OpenSTA.
+After running synthesis, inside the `runs/[date]/results/synthesis is picorv32a_synthesis.v` which is the mapping of the netlist to standard cell library using ABC. The runs/[date]/reports/synthesis will contain synthesis statistic reports and static timing analysis reports. The runs/[date]/synthesis/logs contains log files for the terminal output dumps for running yosys and OpenSTA.
 
 - ![Screenshot 2023-01-26 at 1 56 33 PM](https://user-images.githubusercontent.com/68071764/214918935-c3e667d5-eb07-409e-8652-52685cecc380.png)
 
@@ -214,9 +213,9 @@ After running synthesis, inside the runs/[date]/results/synthesis is picorv32a_s
 
 - Two parameters are of importance when it comes to floorplanning namely, Utilisation Factor and Aspect Ratio. They are defined as follows:
 
-  Utilisation Factor =  Area occupied by netlist /  Total area of core         
+  `Utilisation Factor =  Area occupied by netlist /  Total area of core `        
                    
-  Aspect Ratio =  Height /  Width
+  `Aspect Ratio =  Height /  Width`
                  
 - A Utilisation Factor of 1 signifies 100% utilisation leaving no space for extra cells such as buffer. However, practically, the Utilisation Factor is 0.5-0.6. Likewise, an Aspect ratio of 1 implies that the chip is square shaped. Any value other than 1 implies rectanglular chip.
 
@@ -247,7 +246,7 @@ This makes sure that the automated placement and routing tool does not place any
 
 1. <b>Set configuration variables:</b> Before running floorplan stage, the configuration variables or switches must be configured first. The configuration variables are on openlane/configuration:
 
-- floorplan.tcl - System default envrionment variables
+ floorplan.tcl - System default envrionment variables
 - conifg.tcl
 - sky130A_sky130_fd_sc_hd_config.tcl
 
@@ -266,7 +265,7 @@ Floorplan envrionment variables or switches:
 
 2. <b>Run floorplan on OpenLane:</b>
 
-run_floorplan
+`run_floorplan`
 ![Screenshot 2023-01-27 at 6 24 27 PM](https://user-images.githubusercontent.com/68071764/215095780-c33f67b6-b40e-4d0f-b56e-c98a73587660.png)
 
 3. <b>Check the results:</b> The output of this stage is runs/[date]/results/floorplan/picorv32a.floorplan.def which is a design exchange format, containing the die area and positions.
@@ -277,7 +276,7 @@ run_floorplan
 
 - The die area here is in database units and 1 micron is equivalent to 1000 database units. Thus area of the die is <b> (660685/1000)microns*(671405/1000)microns = 443587 microns squared.</b>
 
-4. <b>View the layout on magic.</b> Open def file using <b>magic:</b>
+4. <b>View the layout on magic.</b> Open def file `using magic:`
 
 ‌<b>ativirani07@vsd-pd-workshop-01:~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/my_run1/results/floorplan$ magic -T /home/ativirani07/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../temp/merged.lef def read  picorv32a.floorplan.def</b>
 
@@ -285,7 +284,7 @@ run_floorplan
 ![Screenshot 2023-01-28 at 1 29 16 PM](https://user-images.githubusercontent.com/68071764/215254484-933a150d-d305-4762-8c3a-0625836903fc.png)
 ![Screenshot 2023-01-29 at 1 04 20 AM](https://user-images.githubusercontent.com/68071764/215307665-94449121-add7-4c3e-a4f6-db9c52c3a16b.png)
 
-- One can zoom into Magic layout by selecting an area with left and right mouse clcik followed by pressing "z" key. Here, equidistant input pins (FP_IO_MODE = 1) can be viewed: To center the view, press "s" to select whole die then press "v". Type "what" in tkcon to display information of selected object. These objects might be IO pin, decap cell, or well taps as shown below.
+- One can zoom into Magic layout by selecting an area with left and right mouse clcik followed by `pressing "z" `key. Here, equidistant input pins (FP_IO_MODE = 1) can be viewed: To center the view,` press "s" `to select whole die then `press "v"`. Type "what" in tkcon to display information of selected object. These objects might be IO pin, decap cell, or well taps as shown below.
 
 ![Screenshot 2023-01-29 at 1 11 36 AM](https://user-images.githubusercontent.com/68071764/215307746-c4ba7593-a397-4cf4-b2ef-f5f8d99ea041.png)
 ![Screenshot 2023-01-29 at 1 13 45 AM](https://user-images.githubusercontent.com/68071764/215307791-d554058f-8f7c-41c4-9ad6-34d855166ee2.png)
@@ -335,8 +334,8 @@ Negative propagation delay is unexpected. That means the output comes before the
 
 ##DAY 3: Design a Library Cell using Magic Layout and Ngspice Characterization
 
-Configurations on OpenLANE can be changed on the flight. For example, to change IO_mode to be not equidistant, use <b>% set ::env(FP_IO_MODE) 2;</b> on OpenLANE. The IO pins will not be equidistant on mode 2 (default of 1).
-Run floorplan again via <b>% run_floorplan</b> and view the def layout on magic. However, changing the configuration on the fly will not change the runs/config.tcl, the configuration will only be available on the current session. To echo current value of variable:<b> echo $::env(FP_IO_MODE)</b>
+Configurations on OpenLANE can be changed on the flight. For example, to change IO_mode to be not equidistant, use `% set ::env(FP_IO_MODE) 2;` on OpenLANE. The IO pins will not be equidistant on mode 2 (default of 1).
+Run floorplan again via `run_floorplan` and view the def layout on magic. However, changing the configuration on the fly will not change the runs/config.tcl, the configuration will only be available on the current session. To echo current value of variable` echo $::env(FP_IO_MODE)`
 
 <b>Designing a Library Cell:</b>
 1. SPICE deck = component connectivity (basically a netlist) of the CMOS inverter.
@@ -350,10 +349,10 @@ Run floorplan again via <b>% run_floorplan</b> and view the def layout on magic.
 Notes:
 
 - Syntax for the PMOS and NMOS descriptiom:
-<b>'[component name] [drain] [gate] [source] [substrate] [transistor type] W=[width] L=[length]'</b>
+'[component name] [drain] [gate] [source] [substrate] [transistor type] W=[width] L=[length]'
 - All components are described based on nodes and its values
-- <b>.op</b> is the start of SPICE simulation operation where Vin will be sweep from 0 to 2.5 with 0.5 steps
-- <b>tsmc_025um_model.mod</b> is the model file containing the technological parameters for the 0.25um NMOS and PMOS The steps to simulate in SPICE:
+- `.op` is the start of SPICE simulation operation where Vin will be sweep from 0 to 2.5 with 0.5 steps
+- `tsmc_025um_model.mod` is the model file containing the technological parameters for the 0.25um NMOS and PMOS The steps to simulate in SPICE:
 ```
 source [filename].cir
 run
@@ -486,7 +485,7 @@ The side-wall spacers maintains the N-/P- while implanting the N+/P+
 
 ### Inverter Standard cell Layout & SPICE extraction
 
-- The Magic layout of a CMOS inverter will be used so as to intergate the inverter with the picorv32a design. To do this, inverter magic file is sourced from <b>vsdstdcelldesign</b> by cloning it within the <b>openlane_working_dir/openlane</b> directory as follows:
+- The Magic layout of a CMOS inverter will be used so as to intergate the inverter with the picorv32a design. To do this, inverter magic file is sourced from `vsdstdcelldesign` by cloning it within the `openlane_working_dir/openlane` directory as follows:
 
 git clone https://github.com/nickson-jose/vsdstdcelldesign
 
@@ -494,9 +493,9 @@ git clone https://github.com/nickson-jose/vsdstdcelldesign
 
 - To invoke magic to view the sky130_inv.mag file, the sky130A.tech file must be included in the command along with its path. To ease up the complexity of this command, the tech file can be copied from the magic folder to the vsdstdcelldesign folder.
 
-- The sky130_inv.mag file can then be invoked in Magic very easily:
+- The `sky130_inv.mag `file can then be invoked in Magic very easily:
 
-magic -T sky130A.tech sky130_inv.mag &
+<b>magic -T sky130A.tech sky130_inv.mag &</b>
 
 ![Screenshot 2023-01-29 at 2 42 46 PM](https://user-images.githubusercontent.com/68071764/215317722-284b5d87-2711-4646-aff5-6bc6ecc2738d.png)
 ![Screenshot 2023-01-29 at 3 04 48 PM](https://user-images.githubusercontent.com/68071764/215318265-e3842c9d-16ff-4393-9fad-b804538de4df.png)
@@ -591,7 +590,7 @@ Four timing parameters are used to characterize the inverter standard cell:
  1. Rise transiton - Time taken by output waveform to transit from 20% to 80% of VDD 20% value (0.66) = 2.19298 ns
     80% value (2.64) = 2.15672= 0.036
  
-      2.19298- 2.15672= 0.03626ns
+      '2.19298- 2.15672= 0.03626ns'
  
 ![Screenshot 2023-01-29 at 8 34 11 PM](https://user-images.githubusercontent.com/68071764/215336273-41fbc96d-59fe-4c81-a2f6-393978e774fc.png)
  
@@ -599,7 +598,7 @@ Four timing parameters are used to characterize the inverter standard cell:
  
  ![Screenshot 2023-01-29 at 10 28 14 PM](https://user-images.githubusercontent.com/68071764/215342922-f92094c2-941e-4829-830c-36eebc718b2f.png)
 
-     4.07407-4.03704= 0.03703ns
+     '4.07407-4.03704= 0.03703ns'
  
 3 & 4. Propagation delay - The difference between the time when output as well as input is at 50% (1.65). ( o/p falls and i/p rises gives fall delay, o/p rises and i/p falls gives us the rise delay)
 
@@ -607,13 +606,13 @@ rise delay:
 
 ![Screenshot 2023-01-29 at 8 59 19 PM](https://user-images.githubusercontent.com/68071764/215336738-65dadd10-74ce-482f-bc54-189cfd5d7e63.png)
  
- 2.18148-2.15556= 0.02592ns
+ '2.18148-2.15556= 0.02592ns'
  
 fall delay:
  
 ![Screenshot 2023-01-29 at 10 40 05 PM](https://user-images.githubusercontent.com/68071764/215343464-e3d805ae-a066-4afc-aed0-fd1fe0a888a8.png)
 
- 4.05287-4.05057= 0.0023ns
+ '4.05287-4.05057= 0.0023ns'
 
  
 The above characterisation is done at 27 C.
@@ -649,7 +648,7 @@ The width of the standard cell must be odd multiple of the tracks horizontal pit
 
 -  Next, we will extract the LEF file. The LEF file contains the cell size, port definitions, and properties which aid the placer and router tool. With that, the ports definition, port class, and port use must be set first. The instructions to set these definitions via Magic are on the <B>vsdstdcelldesign</b> repo.
 
-- Next, save the mag file with a new filename save sky130_myinverter.mag. Then type lef write on the tcon terminal. It will generate a LEF file with same name as the magfile sky130_myinverter.lef. Inside that LEF file is:
+- Next, save the mag file with a new filename save sky130_myinverter.mag. Then type lef write on the tcon terminal. It will generate a LEF file with same name as the 'magfile sky130_myinverter.lef.' Inside that LEF file is:
  
  ![image](https://user-images.githubusercontent.com/68071764/215351586-d4da20b4-44e2-4321-8145-ca65fe576216.png)
 
@@ -662,11 +661,11 @@ The liberty file characterizes all cells and is used by the ABC script during sy
 
 Provided inside the cloned vsdstdcelldesign are the liberty files containing the customized inverter cell.
 
-1. Copy the extracted lef file sky130_vsdinv.lef and the liberty files sky130*.lib from /openlane/vsdstdcelldesign/libs to the src directory of picorv32a. 
+1. Copy the extracted lef file 'sky130_vsdinv.lef' and the liberty files sky130*.lib from /openlane/vsdstdcelldesign/libs to the src directory of picorv32a. 
 
 ![Screenshot 2023-01-30 at 1 08 47 AM](https://user-images.githubusercontent.com/68071764/215500593-e9f72be8-dd5e-4381-ae50-c1ce4ce09601.png)
 
-2. Add the folowing to config.tcl inside the picorv32a:
+2. Add the folowing to 'config.tcl' inside the picorv32a:
 ```
 set ::env(LIB_SYNTH) "$::env(OPENLANE_ROOT)/designs/picorv32a/scr/sly130_fd_sc_hd__typical.lib"
 set ::env(LIB_FASTEST) "$::env(OPENLANE_ROOT)/designs/picorv32a/scr/sly130_fd_sc_hd__fast.lib"
@@ -998,7 +997,7 @@ Unlike the general ASIC flow, Power Distribution Network generation is not a par
  
  gen_pdn
  
- run_routing 
+ 'run_routing' 
  
  A DEF file will be formed runs/[date]/results/routing/picorv32.def Open the DEF file output of routing stage in Magic:
  
@@ -1016,7 +1015,7 @@ Unlike the general ASIC flow, Power Distribution Network generation is not a par
  
  Differences from older OpenLANE versions
 In the new version, FP_CORE_UTIL, FP_CORE_VMETAL and FP_CORE_HMETAL environment variables are missing in ioPlacer.log and config.tcl. They need to be included in config.tcl file.
-run_floorplan fails after the STA analysis in the new version. An alternate command can be used: init_floorplan
+'run_floorplan' fails after the STA analysis in the new version. An alternate command can be used: init_floorplan
 SPEF extraction need not be externally performed in the new version. It has been integrated into the OpenLANE flow
 Note: In the new version following commands may be used for an error-free flow:
 
@@ -1030,5 +1029,15 @@ detailed_placement
 gen_pdn
 run_routing
  ```
-### References
-" - Kunal Ghosh - Co-founder of VSD"
+ 
+ # Appendix:
+ 
+1. Tech file .tech contains the metal layer, connectivity between layers, DRC rules, and other definitions needed by Magic layout tool to view a single cell.
+
+2. LEF file .lef is combination of tech lef (contains metal layer geometries) and cell lef (contains geometries for all cells in the standard cell library). This lef file does not contain the logic part of cells, only the footprint that is needed by the PnR tool.
+
+3. DEF file .def is derived from LEF file and is used to transfer the design data from one EDA tool to another EDA tool and contains connectivity of cells of the design and is just a footprint (does not contain the logic part of cells) that the PnR needs. Each EDA tool to run will need to read first the LEF file runs/[date]/tmp/merged.nom.lef and the DEF file output of the previous stage's EDA tool (e.g. CTS EDA tool TritonCTS must first read DEF file from placement stage). So before running a stage, make sure the $::env(CURRENT_DEF) points to DEF file of previous stage or else there will be bunch of errors.
+
+# Acknowledgement
+>  - Kunal Ghosh - Co-founder of VSD
+> -  Nickson Jose - Workshop Instructor
