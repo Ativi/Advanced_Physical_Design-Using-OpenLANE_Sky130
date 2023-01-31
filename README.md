@@ -326,13 +326,13 @@ Notes:
 - All components are described based on nodes and its values
 - <b>.op</b> is the start of SPICE simulation operation where Vin will be sweep from 0 to 2.5 with 0.5 steps
 - <b>tsmc_025um_model.mod</b> is the model file containing the technological parameters for the 0.25um NMOS and PMOS The steps to simulate in SPICE:
-
-- source [filename].cir
-- run
-- setplot 
-- dc1 
-- plot out vs in 
-
+```
+source [filename].cir
+run
+setplot 
+dc1 
+plot out vs in 
+```
 SPICE Analysis for Switching Threshold and Propagation Delay:
 CMOS robustness depends on:
 
@@ -341,34 +341,34 @@ CMOS robustness depends on:
 2. Propagation delay = rise or fall delay
 
 DC transfer analysis is used for finding switching threshold. SPICE DC analysis below uses DC input of 2.5V. Simulation operation is DC sweep from 0V to 2.5V by 0.05V steps:
-
-- Vin in 0 2.5
-- *** Simulation Command ***
-- .op
-- .dc Vin 0 2.5 0.05
-
+```
+Vin in 0 2.5
+*** Simulation Command ***
+.op
+.dc Vin 0 2.5 0.05
+```
 Below is the result of SPICE simulation for DC analysis, the line intersection is the switching threshold:
 ![Screenshot 2023-01-29 at 12 20 46 PM](https://user-images.githubusercontent.com/68071764/215310169-f85ca662-f041-4377-a590-3513efad6274.png)
 
 Meanwhile, transient analysis is used for finding propagation delay. SPICE transient analysis uses pulse input:
-
-- starts at 0V
-- ends at 2.5V
-- starts at time 0
-- rise time of 10ps
-- fall time of 10ps
-- pulse-width of 1ns
-- period of 2ns
-
+```
+starts at 0V
+ends at 2.5V
+starts at time 0
+rise time of 10ps
+fall time of 10ps
+pulse-width of 1ns
+period of 2ns
+```
 ![Screenshot 2023-01-29 at 3 54 01 AM](https://user-images.githubusercontent.com/68071764/215310235-37ad0659-6a26-4fbe-ae77-b8f1b586a493.png)
 
 The simulation operation has 10ps step and ends at 4ns:
-
-- Vin in 0 0 pulse 0 2.5 0 10p 10p 1n 2n 
-- *** Simulation Command ***
-- .op
-- .tran 10p 4n
-
+```
+ Vin in 0 0 pulse 0 2.5 0 10p 10p 1n 2n 
+ *** Simulation Command ***
+ .op
+ .tran 10p 4n
+```
 Below is the result of SPICE simulation for transient analysis:
 
 ![Screenshot 2023-01-29 at 3 54 21 AM](https://user-images.githubusercontent.com/68071764/215310332-c29d773e-583b-4e1b-bfce-03cc5d481fa8.png)
@@ -485,11 +485,11 @@ Other verification steps are to check drain and source connections. The drains o
 <b>LEF or library exchange format:</b> A format that tells us about cell boundaries, VDD and GND lines. It contains no info about the logic of circuit and is also used to protect the IP.
 
 SPICE extraction: Within the Magic environment, following commands are used in tkcon to achieve .mag to .spice extraction:
- 
-- extract all
-- ext2spice cthresh 0 rethresh 0
-- ext2spice
- 
+``` 
+extract all
+ext2spice cthresh 0 rethresh 0
+ext2spice
+ ```
 ![Screenshot 2023-01-29 at 3 36 23 PM](https://user-images.githubusercontent.com/68071764/215320306-686959e9-d200-4a0d-994d-ce529663e9ff.png)
  
  - Now check what is present inside spice file.
@@ -560,18 +560,18 @@ Four timing parameters are used to characterize the inverter standard cell:
 - Cell rise delay = time(50% output rise) - time(50% input fall)
 - Cell fall delay = time(50% output fall) - time(50% input rise)
 
- 1. rise transiton - time taken by output waveform to transit from 20% to 80% of VDD 20% value (0.66) = 2.19298 ns
+ 1. Rise transiton - Time taken by output waveform to transit from 20% to 80% of VDD 20% value (0.66) = 2.19298 ns
     80% value (2.64) = 2.15672= 0.036
  
       2.19298- 2.15672= 0.03626ns
  
 ![Screenshot 2023-01-29 at 8 34 11 PM](https://user-images.githubusercontent.com/68071764/215336273-41fbc96d-59fe-4c81-a2f6-393978e774fc.png)
  
- 2.fall transition - time taken by output waveform to transit from 80% (2.64) to 20% (0.66) of VDD.
+ 2. Fall transition - Time taken by output waveform to transit from 80% (2.64) to 20% (0.66) of VDD.
  
  ![Screenshot 2023-01-29 at 10 28 14 PM](https://user-images.githubusercontent.com/68071764/215342922-f92094c2-941e-4829-830c-36eebc718b2f.png)
 
-     4.07407-4.03704=0.03703ns
+     4.07407-4.03704= 0.03703ns
  
 3 & 4. Propagation delay - The difference between the time when output as well as input is at 50% (1.65). ( o/p falls and i/p rises gives fall delay, o/p rises and i/p falls gives us the rise delay)
 
@@ -581,11 +581,11 @@ rise delay:
  
  2.18148-2.15556= 0.02592ns
  
- fall delay:
+fall delay:
  
 ![Screenshot 2023-01-29 at 10 40 05 PM](https://user-images.githubusercontent.com/68071764/215343464-e3d805ae-a066-4afc-aed0-fd1fe0a888a8.png)
 
- 4.05287-4.05057=0.0023ns
+ 4.05287-4.05057= 0.0023ns
 
  
 The above characterisation is done at 27 C.
@@ -604,6 +604,9 @@ The technology file is a setup file that declares layer types, colors, patterns,
 
 - The input and output ports lies on the intersection of the horizontal and vertical tracks (ensure the routes can reach that ports).
 The width of the standard cell must be odd multiple of the tracks horizontal pitch and height must be odd multiples of tracks vertical pitch
+
+- The width of the standard cell must be odd multiple of the tracks horizontal pitch and height must be odd multiples of tracks vertical pitch.
+
 - To check these guidelines, we need to change the grid of Magic to match the actual metal tracks. The ``` pdks/sky130A/libs.tech/openlane/sky130_fd_sc_hd/tracks ```.info contains those metal informations.
 
 - Use grid command inside the tkon terminal to match the tracks informations:
@@ -621,27 +624,27 @@ The width of the standard cell must be odd multiple of the tracks horizontal pit
  
  ![image](https://user-images.githubusercontent.com/68071764/215351586-d4da20b4-44e2-4321-8145-ca65fe576216.png)
 
-![Screenshot 2023-01-30 at 10 30 11 AM](https://user-images.githubusercontent.com/68071764/215500801-b3f25534-8a9e-430d-b438-f4e000892b43.png)
+1.![Screenshot 2023-01-30 at 10 30 11 AM](https://user-images.githubusercontent.com/68071764/215500801-b3f25534-8a9e-430d-b438-f4e000892b43.png)
 
-![Screenshot 2023-01-30 at 1 17 32 PM](https://user-images.githubusercontent.com/68071764/215497682-96d379c1-a0c1-45fe-8c58-2f6f8ad6ffb1.png)
+2.![Screenshot 2023-01-30 at 1 17 32 PM](https://user-images.githubusercontent.com/68071764/215497682-96d379c1-a0c1-45fe-8c58-2f6f8ad6ffb1.png)
 
-![Screenshot 2023-01-30 at 10 29 24 AM](https://user-images.githubusercontent.com/68071764/215497791-931f1f83-1235-4158-8293-e8922fd377db.png)
+3.![Screenshot 2023-01-30 at 10 29 24 AM](https://user-images.githubusercontent.com/68071764/215497791-931f1f83-1235-4158-8293-e8922fd377db.png)
 
-![Screenshot 2023-01-30 at 1 08 47 AM](https://user-images.githubusercontent.com/68071764/215500593-e9f72be8-dd5e-4381-ae50-c1ce4ce09601.png)
-
-
-![Screenshot 2023-01-30 at 1 56 45 PM](https://user-images.githubusercontent.com/68071764/215497395-d11d8711-84d1-4961-ad5f-b1b95269ea69.png)
-
-![Screenshot 2023-01-30 at 1 18 37 PM](https://user-images.githubusercontent.com/68071764/215497587-9d1d6b05-7d46-4d74-8c50-33ad61ee3d69.png)
+4.![Screenshot 2023-01-30 at 1 08 47 AM](https://user-images.githubusercontent.com/68071764/215500593-e9f72be8-dd5e-4381-ae50-c1ce4ce09601.png)
 
 
-![Screenshot 2023-01-30 at 1 35 00 PM](https://user-images.githubusercontent.com/68071764/215497475-bf6c1bc5-f662-443e-8ba6-e12e8b2ca5e4.png)
+5.![Screenshot 2023-01-30 at 1 56 45 PM](https://user-images.githubusercontent.com/68071764/215497395-d11d8711-84d1-4961-ad5f-b1b95269ea69.png)
+
+6.![Screenshot 2023-01-30 at 1 18 37 PM](https://user-images.githubusercontent.com/68071764/215497587-9d1d6b05-7d46-4d74-8c50-33ad61ee3d69.png)
 
 
-![Screenshot 2023-01-30 at 1 57 48 PM](https://user-images.githubusercontent.com/68071764/215497300-37e8753f-4b66-4022-b24c-10a00fc08e53.png)
+7.![Screenshot 2023-01-30 at 1 35 00 PM](https://user-images.githubusercontent.com/68071764/215497475-bf6c1bc5-f662-443e-8ba6-e12e8b2ca5e4.png)
 
 
- ![Screenshot 2023-01-30 at 5 33 44 PM](https://user-images.githubusercontent.com/68071764/215497212-45e0bcf0-aaf5-41ba-84f1-056f5a194a91.png)
+8.![Screenshot 2023-01-30 at 1 57 48 PM](https://user-images.githubusercontent.com/68071764/215497300-37e8753f-4b66-4022-b24c-10a00fc08e53.png)
+
+
+ 9.![Screenshot 2023-01-30 at 5 33 44 PM](https://user-images.githubusercontent.com/68071764/215497212-45e0bcf0-aaf5-41ba-84f1-056f5a194a91.png)
 
  
  
