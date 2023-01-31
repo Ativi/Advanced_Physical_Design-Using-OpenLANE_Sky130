@@ -636,7 +636,7 @@ Provided inside the cloned vsdstdcelldesign are the liberty files containing the
 
 1. Copy the extracted lef file sky130_myinverter.lef and the liberty files sky130*.lib from /openlane/vsdstdcelldesign/libs to the src directory of picorv32a. 
 
-![Screenshot 2023-01-30 at 1 17 32 PM](https://user-images.githubusercontent.com/68071764/215497682-96d379c1-a0c1-45fe-8c58-2f6f8ad6ffb1.png)
+
 
 2. Add the folowing to config.tcl inside the picorv32a:
 ```
@@ -685,16 +685,14 @@ source $filename
 set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
 add_lefs -src $lefs
 ```
-
-1.![Screenshot 2023-01-30 at 10 30 11 AM](https://user-images.githubusercontent.com/68071764/215500801-b3f25534-8a9e-430d-b438-f4e000892b43.png)
-
-2.
+ssss![Screenshot 2023-01-30 at 10 30 11 AM](https://user-images.githubusercontent.com/68071764/215500801-b3f25534-8a9e-430d-b438-f4e000892b43.png)
+sss
 
 ![Screenshot 2023-01-30 at 10 29 24 AM](https://user-images.githubusercontent.com/68071764/215497791-931f1f83-1235-4158-8293-e8922fd377db.png)
 
-
-4.![Screenshot 2023-01-30 at 1 08 47 AM](https://user-images.githubusercontent.com/68071764/215500593-e9f72be8-dd5e-4381-ae50-c1ce4ce09601.png)
-
+zzz
+![Screenshot 2023-01-30 at 1 08 47 AM](https://user-images.githubusercontent.com/68071764/215500593-e9f72be8-dd5e-4381-ae50-c1ce4ce09601.png)
+qqqq
 
 5.![Screenshot 2023-01-30 at 1 56 45 PM](https://user-images.githubusercontent.com/68071764/215497395-d11d8711-84d1-4961-ad5f-b1b95269ea69.png)
 
@@ -709,7 +707,7 @@ add_lefs -src $lefs
 
  9.![Screenshot 2023-01-30 at 5 33 44 PM](https://user-images.githubusercontent.com/68071764/215497212-45e0bcf0-aaf5-41ba-84f1-056f5a194a91.png)
 
- 
+ placement![Screenshot 2023-01-30 at 1 17 32 PM](https://user-images.githubusercontent.com/68071764/215497682-96d379c1-a0c1-45fe-8c58-2f6f8ad6ffb1.png)
  
  ### LAB DAY 4 (PART 4)
  
