@@ -596,9 +596,9 @@ Next objective is to use this layout of inverter to create a lef file. Using thi
 The technology file is a setup file that declares layer types, colors, patterns, electrical connectivity, DRC, device extraction rules and rules to read LEF and DEF files. Magic layouts can be sourced from opencircuitdesign.com using the command:
  
  
- DAY 4 Pre-layout timing analysis and importance of good clock tree
+ ### DAY 4 Pre-layout timing analysis and importance of good clock tree
  
- Lab Part 1 [Day 4] - Extracting the LEF File:
+ #### Lab Part 1 [Day 4] - Extracting the LEF File:
  
  PnR tool does not need all informations from the .mag file like the logic part but only PnR boundaries, power/ground ports, and input/output ports. This is what a LEF file actually contains. So the next step is to extract the LEF file from Magic. But first, we need to follow guidelines of the PnR tool for the standard cells:
 
@@ -612,6 +612,7 @@ The width of the standard cell must be odd multiple of the tracks horizontal pit
 - Use grid command inside the tkon terminal to match the tracks informations:
  
  ![Screenshot 2023-01-30 at 12 30 52 AM](https://user-images.githubusercontent.com/68071764/215351344-447b64f0-022d-4dbe-b9a8-10a0d3ed76a1.png)
+ 
 ![Screenshot 2023-01-30 at 12 37 20 AM](https://user-images.githubusercontent.com/68071764/215351352-d6078296-fd0c-4e2e-bf23-de329af27a92.png)
 
 -  The grids show where the routing for the local-interconnet layer can only happen, the distance of the grid lines are the required pitch of the wire. Below, we can see that the guidelines are satisfied:
@@ -624,11 +625,73 @@ The width of the standard cell must be odd multiple of the tracks horizontal pit
  
  ![image](https://user-images.githubusercontent.com/68071764/215351586-d4da20b4-44e2-4321-8145-ca65fe576216.png)
 
+
+### Lab Part 2 [Day 4] - Plug-in the Customized Inverter Cell to OpenLane:
+
+Inside ``` pdks/sky130A/libs.ref/sky130_fd_sc_hd/```  are the liberty timing files for SKY130 PDK which contains the timing and power parameters for each cell needed in STA. It can either be slow, typical, fast with different different supply voltages (1v80, 1v65, 1v95, etc.). These are the so called PVT corners. The library name sky130_fd_sc_hd__ss_025C_1v80 describes the PVT corner as slow-slow (delay is maximum), 27° Celsius temperature, at 1.8V power supply. Timing and power parameter of a cell is obtained by simulating the cell in a variety of operating conditions (different corners) and these data are represented in the liberty file.
+
+The liberty file characterizes all cells and is used by the ABC script during synthesis stage which maps the generic cells to the actual standard cells available in the liberty file. Same cell functionality but different sizes are available inside the library.
+
+Provided inside the cloned vsdstdcelldesign are the liberty files containing the customized inverter cell.
+
+1. Copy the extracted lef file sky130_myinverter.lef and the liberty files sky130*.lib from /openlane/vsdstdcelldesign/libs to the src directory of picorv32a. 
+
+![Screenshot 2023-01-30 at 1 17 32 PM](https://user-images.githubusercontent.com/68071764/215497682-96d379c1-a0c1-45fe-8c58-2f6f8ad6ffb1.png)
+
+2. Add the folowing to config.tcl inside the picorv32a:
+```
+set ::env(LIB_SYNTH) "$::env(OPENLANE_ROOT)/designs/picorv32a/scr/sly130_fd_sc_hd__typical.lib"
+set ::env(LIB_FASTEST) "$::env(OPENLANE_ROOT)/designs/picorv32a/scr/sly130_fd_sc_hd__fast.lib"
+set ::env(LIB_SLOWEST) "$::env(OPENLANE_ROOT)/designs/picorv32a/scr/sly130_fd_sc_hd__slow.lib"
+set ::env(LIB_TYPICAL) "$::env(OPENLANE_ROOT)/designs/picorv32a/scr/sly130_fd_sc_hd__typical.lib"
+
+set ::env(EXTRA_LEFS) [glob $::env(OPENLANE_ROOT)/designs/$::env(DESIGN_NAME)/src/*.lef]
+```
+
+This sets the liberty file that will be used for ABC mapping of synthesis (LIB_SYNTH) and for STA (_FASTEST,_SLOWEST,_TYPICAL) and also the extra LEF files (EXTRA_LEFS) for the customized inverter cell. The whole config.tcl then is:
+
+
+```
+# Design
+set ::env(DESIGN_NAME) "picorv32a"
+
+set ::env(VERILOG_FILES) "./designs/picorv32a/src/picorv32a.v"
+set ::env(SDC_FILE) "./designs/picorv32a/src/picorv32a.sdc"
+
+set ::env(CLOCK_PERIOD) "5.000"
+set ::env(CLOCK_PORT) "clk"
+set ::env(CLOCK_NET) $::env(CLOCK_PORT)
+
+set ::env(LIB_SYNTH) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__typical.lib"
+set ::env(LIB_MIN) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__fast.lib"
+set ::env(LIB_MAX) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__slow.lib"
+set ::env(LIB_TYPICAL) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__typical.lib"
+
+set ::env(EXTRA_LEFS) [glob $::env(OPENLANE_ROOT)/designs/$::env(DESIGN_NAME)/src/*.lef]
+
+set ::env(FP_CORE_UTIL) 65
+set ::env(FP_IO_VMETAL) 4
+set ::env(FP_IO_HMETAL) 3
+
+
+set filename $::env(OPENLANE_ROOT)/designs/$::env(DESIGN_NAME)/$::env(PDK)_$::env(STD_CELL_LIBRARY)_config.tcl
+if { [file exists $filename] == 1} {
+source $filename
+}
+```
+
+3. Run docker and prepare the design picorv32a. Plug the new lef file to the OpenLANE flow via:
+```
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+add_lefs -src $lefs
+```
+
 1.![Screenshot 2023-01-30 at 10 30 11 AM](https://user-images.githubusercontent.com/68071764/215500801-b3f25534-8a9e-430d-b438-f4e000892b43.png)
 
-2.![Screenshot 2023-01-30 at 1 17 32 PM](https://user-images.githubusercontent.com/68071764/215497682-96d379c1-a0c1-45fe-8c58-2f6f8ad6ffb1.png)
+2.
 
-3.![Screenshot 2023-01-30 at 10 29 24 AM](https://user-images.githubusercontent.com/68071764/215497791-931f1f83-1235-4158-8293-e8922fd377db.png)
+![Screenshot 2023-01-30 at 10 29 24 AM](https://user-images.githubusercontent.com/68071764/215497791-931f1f83-1235-4158-8293-e8922fd377db.png)
+
 
 4.![Screenshot 2023-01-30 at 1 08 47 AM](https://user-images.githubusercontent.com/68071764/215500593-e9f72be8-dd5e-4381-ae50-c1ce4ce09601.png)
 
