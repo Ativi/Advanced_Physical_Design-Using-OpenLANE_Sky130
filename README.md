@@ -706,8 +706,50 @@ Delay tables are used to capture the timing model of each cell and is included i
 
 ![image](https://user-images.githubusercontent.com/68071764/215746037-0ebeced2-d7b1-4b88-b9ed-c1e62d109c4e.png)
 
+Notice how skew is zero since delay for both clock path is x9'+y15.
 
+### Lab Part 3 [Day 4] - Fix Negative Slack:
 
+1. Let us change some variables to minimize the negative slack. We will now change the variables "on the flight". Use echo $::env(SYNTH_STRATEGY) to view the current value of the variables before changing it:
+```
+% echo $::env(SYNTH_STRATEGY)
+AREA 0
+% set ::env(SYNTH_STRATEGY) "DELAY 0"
+% echo $::env(SYNTH_BUFFERING)
+1
+% echo $::env(SYNTH_SIZING)
+0
+% set ::env(SYNTH_SIZING) 1
+% echo $::env(SYNTH_DRIVING_CELL)
+sky130_fd_sc_hd__inv_2
+```
+
+With SYNTH_STRATEGY of Delay 0, the tool will focus more on optimizing/minimizing the delay, index can be 0 to 3 where 3 is the most optimized for timing (sacrificing more area). SYNTH_BUFFERING of 1 ensures cell buffer will be used on high fanout cells to reduce delay due to high capacitance load. SYNTH_SIZING of 1 will enable cell sizing where cell will be upsize or downsized as needed to meet timing. SYNTH_DRIVING_CELL is the cell used to drive the input ports and is vital for cells with a lot of fan-outs since it needs higher drive strength (larger driving cell needed).
+
+2.Below is the log report for slack and area. 
+
+![Screenshot 2023-01-30 at 1 57 48 PM](https://user-images.githubusercontent.com/68071764/215497300-37e8753f-4b66-4022-b24c-10a00fc08e53.png)
+![Screenshot 2023-01-30 at 2 46 57 PM](https://user-images.githubusercontent.com/68071764/215747607-f802c7da-ed6c-42e6-9439-ef1406a9ba56.png)
+
+3. Next run floor plan by executing the following codes one by one:
+```
+init_floorplan
+place_io
+global_placement_or
+detailed_placement
+tap_decap_or
+detailed_placement
+gen_pdn
+run_cts
+```
+
+![image](https://user-images.githubusercontent.com/68071764/215748056-c872ce6d-02d6-4e99-b96f-dde190a0bf98.png)
+
+![Screenshot 2023-01-30 at 1 35 00 PM](https://user-images.githubusercontent.com/68071764/215497475-bf6c1bc5-f662-443e-8ba6-e12e8b2ca5e4.png)
+
+We can see our sky130_vsdinv file in the merged.lef file inside the tmp folder. The macro is present.
+
+![Screenshot 2023-01-30 at 1 35 00 PM](https://user-images.githubusercontent.com/68071764/215497475-bf6c1bc5-f662-443e-8ba6-e12e8b2ca5e4.png)
 
 x
 x
