@@ -5,7 +5,7 @@ This project gives an interactive tutorial experienced during the VSD Advanced P
 OpenLane is not a tool, it is basically a flow that comprises many opensource EDA tools which includes OpenRoad, Yosys, ABC, Fault, Qflow, Magic and a number of custom scripts for design exploration and optimization. Basic aim to have OpenLane is to have complete RTL to GDSII flow.
 
 # Table of Contents
- DAY1: Inception of open-source EDA, OpenLANE and Sky130 PDK
+[ DAY1: Inception of open-source EDA, OpenLANE and Sky130 PDK
  - Introduction to QFN-48 Package, chip, pads, core, die and IPs
  - Introduction to RISC-V
  - Introduction to all components of open-source digital asic design
@@ -14,7 +14,7 @@ OpenLane is not a tool, it is basically a flow that comprises many opensource ED
  - OpenLANE Directory structure in detail
  - Lab [Day 1] - Determine Flip-flop Ratio
  - Review files after design prep and run synthesis
- - characterize synthesis results 
+ - characterize synthesis results ]
  
  DAY2: Good Floorplan vs Bad Floorplan and Introduction to Library Cells
  
