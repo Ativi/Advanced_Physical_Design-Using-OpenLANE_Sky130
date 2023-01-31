@@ -863,23 +863,62 @@ There are three parameters that we need to consider when building a clock tree:
 * Clock Slew = Due to wire resistance and capacitance of the clock nets, there will be slew in signal at the clock endpoint where signal is not the same with the original input clock signal anymore. This can be solved by clock buffers. Clock buffer differs in regular cell buffers since clock buffers has equal rise and fall time.
 * Crosstalk = Clock shielding prevents crosstalk to nearby nets by breaking the coupling capacitance between the victim (clock net) and aggresor (nets near the clock net), the shield might be connected to VDD or ground since those will not switch. Shileding can also be done on critical data nets.
 
-6.![Screenshot 2023-01-30 at 1 18 37 PM](https://user-images.githubusercontent.com/68071764/215497587-9d1d6b05-7d46-4d74-8c50-33ad61ee3d69.png)
+![Screenshot 2023-01-30 at 1 18 37 PM](https://user-images.githubusercontent.com/68071764/215497587-9d1d6b05-7d46-4d74-8c50-33ad61ee3d69.png)
 
  
  ### LAB DAY 4 (PART 4)
  
  In the terminal in which we run the run_cts command there only go to openroad. Type the following command in the terminal.
+```
 openroad
+```
+
 This will open the open road. Our objective to do the analysis of the entire circut where clock tree has been build now. Now we will open OpenSTA here. For timing alnalysis.
 
-<b>run_cts</b>
+1. We first create a db `
+2. db is create using lef and def file. In our analysis we use these db. (It is a one time process. Whenever lef changes we have to change the db)
+3. To create a db
 
+// first read lef (it is inside the tmp folder (merged.lef)
+read_lef [location] {my case = read_lef /openLANE_flow/designs/picorv32a/runs/30-01_04-42/tmp/merged.lef}
+
+// secondly read def (it is present inside cts folder present under the results folder/cts)
+read_def [location] {my case = /openLANE_flow/designs/picorv32a/runs/30-01_04-42/results/cts/picorv32a.cts.def}
+
+// creating db
+write_db [name] // my case = pico_cts.db (created under the openlane folder)
+
+// reading db 
+read_db [name] // my case = pico_cts.db
+
+//  reading verilog (it is present inside cts folder present under the results/synthesis/picorv32a.synthesis_cts.v)
+read_verilog [location] // {my case = /openLANE_flow/designs/picorv32a/runs/30-01_04-42/results/synthesis/picorv32a.synthesis_cts.v}
+
+// reading library (max)
+read_liberty -max $::env(LIB_FASTEST)
+
+// reading library (min)
+read_liberty -min $::env(LIB_SLOWEST)
+
+// reading sdc
+read_sdc [location] {my case = /openLANE/designs/picorv32a/src/my_base.sdc}
+
+// now the clock has been generated 
+set_propagated_clock [all_clocks]
+
+// report
+report_checks -path_delay min_max -format full_clock_expanded -digits 4
+
+All the loaction should be after /openLANE_flow/.....
+```
+run_cts
+```
 The CTS run adds clock buffers in therefore buffer delays come into picture and our analysis from here on deals with real clocks. Setup and hold time slacks may now be analysed in the post-CTS STA anlysis in OpenROAD within the openLANE flow:
 ```
 openroad
 write_db pico_cts.db
 read_db pico_cts.db
-read_verilog /openLANE_flow/designs/picorv32a/runs/03-07_11-25/results/synthesis/picorv32a.synthesis_cts.v
+read_verilog /openLANE_flow/designs/picorv32a/runs/30-01_04-42/results/synthesis/picorv32a.synthesis_cts.v
 read_liberty $::env(LIB_SYNTH_COMPLETE)
 link_design picorv32a
 read_sdc /openLANE_flow/designs/picorv32a/src/my_base.sdc
