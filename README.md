@@ -634,7 +634,7 @@ The liberty file characterizes all cells and is used by the ABC script during sy
 
 Provided inside the cloned vsdstdcelldesign are the liberty files containing the customized inverter cell.
 
-1. Copy the extracted lef file sky130_myinverter.lef and the liberty files sky130*.lib from /openlane/vsdstdcelldesign/libs to the src directory of picorv32a. 
+1. Copy the extracted lef file sky130_vsdinv.lef and the liberty files sky130*.lib from /openlane/vsdstdcelldesign/libs to the src directory of picorv32a. 
 
 ![Screenshot 2023-01-30 at 1 08 47 AM](https://user-images.githubusercontent.com/68071764/215500593-e9f72be8-dd5e-4381-ae50-c1ce4ce09601.png)
 
@@ -685,10 +685,17 @@ source $filename
 set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
 add_lefs -src $lefs
 ```
-ssss![Screenshot 2023-01-30 at 10 30 11 AM](https://user-images.githubusercontent.com/68071764/215500801-b3f25534-8a9e-430d-b438-f4e000892b43.png)
-sss
 
+4. Next run_synthesis. Below is the synthesis statistics report runs/[date]/reports/synthesis/1-synthesis.AREA_0.stat.rpt after the run, and as we can see sky130_vsdinv cell is successfully included in the design!
 ![Screenshot 2023-01-30 at 10 29 24 AM](https://user-images.githubusercontent.com/68071764/215497791-931f1f83-1235-4158-8293-e8922fd377db.png)
+
+
+![Screenshot 2023-01-30 at 10 30 11 AM](https://user-images.githubusercontent.com/68071764/215500801-b3f25534-8a9e-430d-b438-f4e000892b43.png)
+
+x
+x
+v
+b
 
 zzz
 
