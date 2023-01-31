@@ -750,9 +750,87 @@ We can see our sky130_vsdinv file in the merged.lef file inside the tmp folder. 
 
 ![Screenshot 2023-01-30 at 1 57 48 PM](https://user-images.githubusercontent.com/68071764/215497300-37e8753f-4b66-4022-b24c-10a00fc08e53.png)
 
--xxxx
+We can also see the sky130_vsdinv inside the layout also:
 
--pppp
+![image](https://user-images.githubusercontent.com/68071764/215750555-edf4a27e-597f-44e8-acce-87f7e103ab0b.png)
+
+
+### Timing Analysis (Pre-Layout STA using Ideal Clocks):
+Pre-layout STA will not yet include effects of clock buffers and net-delay due to RC parasitics (wire delay will be derived from PDK library wire model).
+![image](https://user-images.githubusercontent.com/68071764/215751429-9278e8c1-2d82-4860-939d-f83f6eeda5af.png)
+
+Setup timing analysis equation is:
+```
+Θ < T - S - SU
+```
+- Θ = Combinational delay which includes clk to Q delay of launch flop and internal propagation delay of all gates between launch and capture flop
+- T = Time period, also called the required time
+- S = Setup time. As demonstrated below, signal must settle on the middle (input of Mux 2) before clock tansists to 1 so the delay due to Mux 1 must be considered, this delay is the setup time.
+
+![image](https://user-images.githubusercontent.com/68071764/215751704-eb393729-f001-444f-8850-f779b68e249f.png)
+
+- SU = Setup uncertainty due to jitter which is temporary variation of clock period. This is due to non-idealities of PLL/clock source.
+
+### Lab Part 5 [Day 4] - Pre-Layout STA with OpenSTA:
+
+In cts we try to change the netlist by making clock tree.
+
+The below files can be found in th extras folder in vsdstdcelldesign.
+
+Making the pre_sta.conf and save it in the openlane folder.
+```
+set_cmd_units -time ns -capacitance pF -current mA -voltage V -resistance kOhm -distance um
+read_liberty -max /home/ativirani07/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/sky130_fd_sc_hd__slow.lib
+read_liberty -min /home/ativirani07/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/sky130_fd_sc_hd__fast.lib
+read_verilog /home/ativirani07/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/30-01_04-42/results/synthesis/picorv32a.synthesis.v
+link_design picorv32a
+read_sdc /home/ativirani07/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/picorv32a.sdc
+report_checks -path_delay min_max -fields {slew trans net cap input_pin}
+```
+
+After cts new .v files start getting created.
+
+Creating picorv32a.sdc and save this file in the src folder of picorv32a folder.
+```
+set ::env(CLOCK_PORT) clk
+set ::env(CLOCK_PERIOD) 12.000
+set ::env(SYNTH_DRIVING_CELL) sky130_fd_sc_hd__inv_8
+set ::env(SYNTH_DRIVING_CELL_PIN) Y
+set ::env(SYNTH_CAP_LOAD) 17.65
+create_clock [get_ports $::env(CLOCK_PORT)]  -name $::env(CLOCK_PORT)  -period $::env(CLOCK_PERIOD)
+set IO_PCT  0.2
+set input_delay_value [expr $::env(CLOCK_PERIOD) * $IO_PCT]
+set output_delay_value [expr $::env(CLOCK_PERIOD) * $IO_PCT]
+puts "\[INFO\]: Setting output delay to: $output_delay_value"
+puts "\[INFO\]: Setting input delay to: $input_delay_value"
+
+
+set clk_indx [lsearch [all_inputs] [get_port $::env(CLOCK_PORT)]]
+#set rst_indx [lsearch [all_inputs] [get_port resetn]]
+set all_inputs_wo_clk [lreplace [all_inputs] $clk_indx $clk_indx]
+#set all_inputs_wo_clk_rst [lreplace $all_inputs_wo_clk $rst_indx $rst_indx]
+set all_inputs_wo_clk_rst $all_inputs_wo_clk
+
+
+# correct resetn
+set_input_delay $input_delay_value  -clock [get_clocks $::env(CLOCK_PORT)] $all_inputs_wo_clk_rst
+#set_input_delay 0.0 -clock [get_clocks $::env(CLOCK_PORT)] {resetn}
+set_output_delay $output_delay_value  -clock [get_clocks $::env(CLOCK_PORT)] [all_outputs]
+
+# TODO set this as parameter
+set_driving_cell -lib_cell $::env(SYNTH_DRIVING_CELL) -pin $::env(SYNTH_DRIVING_CELL_PIN) [all_inputs]
+set cap_load [expr $::env(SYNTH_CAP_LOAD) / 1000.0]
+puts "\[INFO\]: Setting load to: $cap_load"
+set_load  $cap_load [all_outputs]
+```
+
+This is replicating the same results as we had after run synthesis stage. pre_sta.conf will be the fill on which we will be doing our STA analysis.
+
+To perform pre STA run the command below by opening the terminal in openlane folder which is inside the openlane_working_dir.
+
+sta [file_name] // (our case = pre_sta.conf)
+
+
 
 ![Screenshot 2023-01-30 at 1 35 00 PM](https://user-images.githubusercontent.com/68071764/215497475-bf6c1bc5-f662-443e-8ba6-e12e8b2ca5e4.png)
 
