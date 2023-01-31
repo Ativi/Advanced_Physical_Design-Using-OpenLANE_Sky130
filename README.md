@@ -687,10 +687,27 @@ add_lefs -src $lefs
 ```
 
 4. Next run_synthesis. Below is the synthesis statistics report runs/[date]/reports/synthesis/1-synthesis.AREA_0.stat.rpt after the run, and as we can see sky130_vsdinv cell is successfully included in the design!
+
 ![Screenshot 2023-01-30 at 10 29 24 AM](https://user-images.githubusercontent.com/68071764/215497791-931f1f83-1235-4158-8293-e8922fd377db.png)
 
-
+- 
 ![Screenshot 2023-01-30 at 10 30 11 AM](https://user-images.githubusercontent.com/68071764/215500801-b3f25534-8a9e-430d-b438-f4e000892b43.png)
+
+#### Delay Table:
+In order to avoid large skew between endpoints of a clock tree (signal arrives at different point in time):
+
+- Buffers on the same level must have same capacitive load to ensure same timing delay or latency on the same level.
+- Buffers on the same level must also be the same size (different buffer sizes -> different W/L ratio -> different resistance -> different RC constant -> different delay).
+
+![image](https://user-images.githubusercontent.com/68071764/215745841-81d6d294-af69-4281-ac03-6a1f04059b27.png)
+Buffers on different level will have different capacitive load and buffer size but as long as they are the same load and size on the same level, the total delay for each clock tree path will be the same thus skew will remain zero. This means different levels will have varying input transition and output capacitive load and thus varying delay.
+
+Delay tables are used to capture the timing model of each cell and is included inside the liberty file. The main factor in delay is the output slew. The output slew in turn depends on capacitive load and input slew. The input slew is a function of previous buffer's output cap load and input slew and it also has its own transition delay table.
+
+![image](https://user-images.githubusercontent.com/68071764/215746037-0ebeced2-d7b1-4b88-b9ed-c1e62d109c4e.png)
+
+
+
 
 x
 x
