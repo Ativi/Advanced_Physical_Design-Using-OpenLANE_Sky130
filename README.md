@@ -728,7 +728,6 @@ With SYNTH_STRATEGY of Delay 0, the tool will focus more on optimizing/minimizin
 
 2.Below is the log report for slack and area. 
 
-![Screenshot 2023-01-30 at 1 57 48 PM](https://user-images.githubusercontent.com/68071764/215497300-37e8753f-4b66-4022-b24c-10a00fc08e53.png)
 ![Screenshot 2023-01-30 at 2 46 57 PM](https://user-images.githubusercontent.com/68071764/215747607-f802c7da-ed6c-42e6-9439-ef1406a9ba56.png)
 
 3. Next run floor plan by executing the following codes one by one:
@@ -748,6 +747,12 @@ run_cts
 ![Screenshot 2023-01-30 at 1 35 00 PM](https://user-images.githubusercontent.com/68071764/215497475-bf6c1bc5-f662-443e-8ba6-e12e8b2ca5e4.png)
 
 We can see our sky130_vsdinv file in the merged.lef file inside the tmp folder. The macro is present.
+
+![Screenshot 2023-01-30 at 1 57 48 PM](https://user-images.githubusercontent.com/68071764/215497300-37e8753f-4b66-4022-b24c-10a00fc08e53.png)
+
+-xxxx
+
+-pppp
 
 ![Screenshot 2023-01-30 at 1 35 00 PM](https://user-images.githubusercontent.com/68071764/215497475-bf6c1bc5-f662-443e-8ba6-e12e8b2ca5e4.png)
 
