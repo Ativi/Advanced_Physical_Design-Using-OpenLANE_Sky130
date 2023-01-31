@@ -5,7 +5,7 @@ This project gives an interactive tutorial experienced during the VSD Advanced P
 OpenLane is not a tool, it is basically a flow that comprises many opensource EDA tools which includes OpenRoad, Yosys, ABC, Fault, Qflow, Magic and a number of custom scripts for design exploration and optimization. Basic aim to have OpenLane is to have complete RTL to GDSII flow.
 
 # Table of Contents
-[ DAY1: Inception of open-source EDA, OpenLANE and Sky130 PDK
+> DAY1: Inception of open-source EDA, OpenLANE and Sky130 PDK
  - Introduction to QFN-48 Package, chip, pads, core, die and IPs
  - Introduction to RISC-V
  - Introduction to all components of open-source digital asic design
@@ -14,9 +14,9 @@ OpenLane is not a tool, it is basically a flow that comprises many opensource ED
  - OpenLANE Directory structure in detail
  - Lab [Day 1] - Determine Flip-flop Ratio
  - Review files after design prep and run synthesis
- - characterize synthesis results ]
+ - characterize synthesis results
  
- DAY2: Good Floorplan vs Bad Floorplan and Introduction to Library Cells
+ > DAY2: Good Floorplan vs Bad Floorplan and Introduction to Library Cells
  
  - Floorplanning considerations
  - Utilization Factor & Aspect Ratio
@@ -26,13 +26,41 @@ OpenLane is not a tool, it is basically a flow that comprises many opensource ED
  - Pin Placement
  - Floorplan run on OpenLANE & view in Magic
  - Placement
-- Placement run on OpenLANE & view in Magic
-- library characterization
-- Timing characterization
+ - Placement run on OpenLANE & view in Magic
+ - library characterization
+ - Timing characterization
 
-DAY3:
+ > DAY3: Design library cell using Magic Layout and ngspice characterization
  
-## DAY1: Inception of open-source EDA, OpenLANE and Sky130 PDK
+- Designing a Library Cell
+- SPICE Deck Netlist Description
+- SPICE Deck creation & Simulation Inverter Standard cell Layout & SPICE extraction
+- CMOS Fabrication Process (16-Mask CMOS Process)
+- Inverter Standard cell Layout & SPICE extraction
+- Inverter Standard cell characterization
+- Magic Features & DRC rules
+   
+ > DAY 4 Pre-layout timing analysis and importance of good clock tree
+ 
+- Extracting the LEF File
+- Plug-in the Customized Inverter Cell to OpenLane
+- Fix Negative Slack
+- Timing Analysis (Pre-Layout STA using Ideal Clocks)
+- Pre-Layout STA with OpenSTA
+- Clock Tree Synthesis
+- Replacing the Clock Buffer:
+
+ > DAY 5: Final Steps for RTL2GDS using TritonRoute and OpenSTA
+- Maze Routing
+- DRC Cleaning
+- Power Distribution Network
+- Routing Stage
+
+> References
+>  - Kunal Ghosh - Co-founder of VSD
+> -  Nickson Jose - Workshop Instructor
+ 
+# DAY1: Inception of open-source EDA, OpenLANE and Sky130 PDK
 
 ### Introduction to QFN-48 Package, chip, pads, core, die and IPs
 
@@ -113,7 +141,7 @@ The openLANE file structure looks something like this:
 - <b>open_pdks:</b> contains scripts to setup pdks for opensource tools
 - <b>sky130A:</b> contains sky130 pdk files
 
-#### Lab [Day 1] - Determine Flip-flop Ratio
+#### Determine Flip-flop Ratio
 
 - The task is to find the flip-flop ratio ratio for the design picorv32a. This is the ratio of the number of flip flops to the total number of cells. For the OpenLane installation, the steps are very straight forward and can be found on the OpenLane repo.
 
@@ -178,7 +206,7 @@ After running synthesis, inside the runs/[date]/results/synthesis is picorv32a_s
 - ![Screenshot 2023-01-26 at 2 07 24 PM](https://user-images.githubusercontent.com/68071764/214919070-7d4d1438-d53a-437f-96a1-b992858cde27.png)
 
 
-## Day 2: Floorplanning and library cells
+# Day 2: Floorplanning and library cells
 
 ### Floorplanning considerations
 
@@ -596,9 +624,9 @@ Next objective is to use this layout of inverter to create a lef file. Using thi
 The technology file is a setup file that declares layer types, colors, patterns, electrical connectivity, DRC, device extraction rules and rules to read LEF and DEF files. Magic layouts can be sourced from opencircuitdesign.com using the command:
  
  
- ### DAY 4 Pre-layout timing analysis and importance of good clock tree
+ # DAY 4 Pre-layout timing analysis and importance of good clock tree
  
- #### Lab Part 1 [Day 4] - Extracting the LEF File:
+ #### Extracting the LEF File:
  
  PnR tool does not need all informations from the .mag file like the logic part but only PnR boundaries, power/ground ports, and input/output ports. This is what a LEF file actually contains. So the next step is to extract the LEF file from Magic. But first, we need to follow guidelines of the PnR tool for the standard cells:
 
@@ -626,7 +654,7 @@ The width of the standard cell must be odd multiple of the tracks horizontal pit
  ![image](https://user-images.githubusercontent.com/68071764/215351586-d4da20b4-44e2-4321-8145-ca65fe576216.png)
 
 
-### Lab Part 2 [Day 4] - Plug-in the Customized Inverter Cell to OpenLane:
+###  Plug-in the Customized Inverter Cell to OpenLane:
 
 Inside ``` pdks/sky130A/libs.ref/sky130_fd_sc_hd/```  are the liberty timing files for SKY130 PDK which contains the timing and power parameters for each cell needed in STA. It can either be slow, typical, fast with different different supply voltages (1v80, 1v65, 1v95, etc.). These are the so called PVT corners. The library name sky130_fd_sc_hd__ss_025C_1v80 describes the PVT corner as slow-slow (delay is maximum), 27° Celsius temperature, at 1.8V power supply. Timing and power parameter of a cell is obtained by simulating the cell in a variety of operating conditions (different corners) and these data are represented in the liberty file.
 
@@ -708,7 +736,7 @@ Delay tables are used to capture the timing model of each cell and is included i
 
 Notice how skew is zero since delay for both clock path is x9'+y15.
 
-### Lab Part 3 [Day 4] - Fix Negative Slack:
+### Fix Negative Slack:
 
 1. Let us change some variables to minimize the negative slack. We will now change the variables "on the flight". Use echo $::env(SYNTH_STRATEGY) to view the current value of the variables before changing it:
 ```
@@ -771,7 +799,7 @@ Setup timing analysis equation is:
 
 - SU = Setup uncertainty due to jitter which is temporary variation of clock period. This is due to non-idealities of PLL/clock source.
 
-### Lab Part 5 [Day 4] - Pre-Layout STA with OpenSTA:
+### Pre-Layout STA with OpenSTA:
 
 In cts we try to change the netlist by making clock tree.
 
@@ -962,7 +990,7 @@ As shown below, power and ground flows from power/ground pads -> power/ground ri
  
  ![image](https://user-images.githubusercontent.com/68071764/215485019-aa6898fd-8f5e-4677-b079-95521f315c51.png)
 
- Lab Part 1 [Day 5] - Routing Stage:
+ ### Routing Stage:
  
  Power Distribution Network generation
  
