@@ -827,36 +827,44 @@ set_load  $cap_load [all_outputs]
 This is replicating the same results as we had after run synthesis stage. pre_sta.conf will be the fill on which we will be doing our STA analysis.
 
 To perform pre STA run the command below by opening the terminal in openlane folder which is inside the openlane_working_dir.
-
+```
 sta [file_name] // (our case = pre_sta.conf)
+```
 
+As we haven't done CTS hold time doesn't hold any significance. The delay of any cell is function of input slew and output load. We can play with these data and can get slack as positive. So we can also play with some of some of these parameters.
 
+Command to check what a particular cell is driving:
+```
+report_net -connections _[cell number/net number]_
 
-![Screenshot 2023-01-30 at 1 35 00 PM](https://user-images.githubusercontent.com/68071764/215497475-bf6c1bc5-f662-443e-8ba6-e12e8b2ca5e4.png)
+```
+To replace the buffer (from buf 1 to buf 4) we use the following command.
 
-x
-x
-v
-b
+replace_cell _23732_ sky130_fd_sc_hd__buf_4
 
-zzz
+report check will report the worst path, by default it is the max setup slack
+```
+report_checks -field {net cap slew input_pins} -digits 4
+```
+Upsizing the buffer will change the cell. We can replace cell to bring donw the slack. It will slightly increase the area,
+```
+1. First find the cell you want to replace. 
+2. Then echo its net details by the following command 
+report_net -connections _[cell number/net number]_ 
+3. Then use the replace command to upsize it.
+replace_cell _[net to be replaced]_ [new net name]
 
-qqqq
+```
+## Clock Tree Synthesis
 
-5.![Screenshot 2023-01-30 at 1 56 45 PM](https://user-images.githubusercontent.com/68071764/215497395-d11d8711-84d1-4961-ad5f-b1b95269ea69.png)
+There are three parameters that we need to consider when building a clock tree:
+
+* Clock Skew = In order to have minimum skew between clock endpoints, clock tree is used. This results in equal wirelength (thus equal latency/delay) for every path of the clock.
+* Clock Slew = Due to wire resistance and capacitance of the clock nets, there will be slew in signal at the clock endpoint where signal is not the same with the original input clock signal anymore. This can be solved by clock buffers. Clock buffer differs in regular cell buffers since clock buffers has equal rise and fall time.
+* Crosstalk = Clock shielding prevents crosstalk to nearby nets by breaking the coupling capacitance between the victim (clock net) and aggresor (nets near the clock net), the shield might be connected to VDD or ground since those will not switch. Shileding can also be done on critical data nets.
 
 6.![Screenshot 2023-01-30 at 1 18 37 PM](https://user-images.githubusercontent.com/68071764/215497587-9d1d6b05-7d46-4d74-8c50-33ad61ee3d69.png)
 
-
-7.![Screenshot 2023-01-30 at 1 35 00 PM](https://user-images.githubusercontent.com/68071764/215497475-bf6c1bc5-f662-443e-8ba6-e12e8b2ca5e4.png)
-
-
-8.![Screenshot 2023-01-30 at 1 57 48 PM](https://user-images.githubusercontent.com/68071764/215497300-37e8753f-4b66-4022-b24c-10a00fc08e53.png)
-
-
- 9.![Screenshot 2023-01-30 at 5 33 44 PM](https://user-images.githubusercontent.com/68071764/215497212-45e0bcf0-aaf5-41ba-84f1-056f5a194a91.png)
-
- placement![Screenshot 2023-01-30 at 1 17 32 PM](https://user-images.githubusercontent.com/68071764/215497682-96d379c1-a0c1-45fe-8c58-2f6f8ad6ffb1.png)
  
  ### LAB DAY 4 (PART 4)
  
