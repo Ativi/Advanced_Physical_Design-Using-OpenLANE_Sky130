@@ -12,7 +12,7 @@ OpenLane is not a tool, it is basically a flow that comprises many opensource ED
  - Simplified RTL2GDS flow
  - Introduction to OpenLANE detailed ASIC design flow
  - OpenLANE Directory structure in detail
- - Lab [Day 1] - Determine Flip-flop Ratio
+ - Determine Flip-flop Ratio
  - Review files after design prep and run synthesis
  - characterize synthesis results
  
